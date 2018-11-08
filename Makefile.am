@@ -19,3 +19,4 @@ bin_PROGRAMS = tcedit
 tcedit_SOURCES = \
 	tcedit.c
 
+man_MANS = tcedit.1

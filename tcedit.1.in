@@ -1,0 +1,39 @@
+.\" tcedit - a line oriented text editor.
+.\" Copyright (C) 2018  Thomas Cort <linuxgeek@gmail.com>
+.\"
+.\" This program is free software: you can redistribute it and/or modify
+.\" it under the terms of the GNU General Public License as published by
+.\" the Free Software Foundation, either version 3 of the License, or
+.\" (at your option) any later version.
+.\"
+.\" This program is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\" GNU General Public License for more details.
+.\"
+.\" You should have received a copy of the GNU General Public License
+.\" along with this program.  If not, see <http://www.gnu.org/licenses/>.
+.TH TCEDIT "1" "November 2018" "@PACKAGE_STRING@" "User Commands"
+.SH NAME
+tcedit \- a line oriented text editor.
+.SH SYNOPSIS
+.B tcedit
+[\fIfilename\fR]
+.SH DESCRIPTION
+tcedit is a line oriented text editor.
+.SH OPTIONS
+.TP
+\fB\-h\fR, \-?            \fB\-\-help\fR
+Print a helpful message and exit
+.TP
+\fB\-v\fR                 \fB\-\-version\fR
+Print version information and exit
+.SH AUTHORS
+See https://github.com/tcort/tcedit/graphs/contributors
+.SH "REPORTING BUGS"
+See https://github.com/tcort/tcedit/issues
+.SH COPYRIGHT
+Copyright \(co 2018  Thomas Cort <linuxgeek@gmail.com>
+.br
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
