@@ -1,0 +1,30 @@
+# tcedit
+
+A simple text editor.
+
+## Usage
+
+```
+tcedit [-v] [-p string]
+```
+
+| option      | description                                                                                       |
+| ----------- | ------------------------------------------------------------------------------------------------- |
+| `-p string` | Sets the command prompt to the given `string` and toggles prompting to on. Default prompt is `*`. |
+| `-v`        | Print version string (e.g. `tcedit 1.2.3`) and exit.                                              |
+
+## Addressing
+
+Lines may be addressed as follows:
+
+* `.` - current line in the buffer
+* `$` - last line in the buffer
+* _n_ - numeric line number (e.g. `42`, `15`, etc)
+
+## Commands
+
+| command              | description                                                                                                                       |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `P`                  | Toggle command prompt on/off. Initially the prompt is off unless the `-p string` command line argument was given.                 |
+| `Q`                  | Force quit. Always succeeds. Unsaved changes are lost.                                                                            |
+| `q`                  | Quit. Fails if there are unsaved changes. Succeeds if entered a second time with no changes in between. Unsaved changes are lost. |

@@ -1,5 +1,5 @@
 # tcedit - a line oriented text editor.
-# Copyright (C) 2018  Thomas Cort <linuxgeek@gmail.com>
+# Copyright (C) 2018, 2019  Thomas Cort <linuxgeek@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,6 +17,14 @@
 bin_PROGRAMS = tcedit
 
 tcedit_SOURCES = \
-	tcedit.c
+	buffer.c buffer.h \
+	cmd.c cmd.h \
+	config.h \
+	ctx.h \
+	io.c io.h \
+	lines.c lines.h \
+	main.c \
+	match.c match.h \
+	parse.c parse.h
 
 man_MANS = tcedit.1

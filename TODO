@@ -1,0 +1,3 @@
+memory management
+ - free lines before exit
+ - free memory when exiting due to error

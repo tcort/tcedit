@@ -1,5 +1,5 @@
 dnl    tcedit - a line oriented text editor.
-dnl    Copyright (C) 2018  Thomas Cort <linuxgeek@gmail.com>
+dnl    Copyright (C) 2018, 2019  Thomas Cort <linuxgeek@gmail.com>
 dnl
 dnl    This program is free software: you can redistribute it and/or modify
 dnl    it under the terms of the GNU General Public License as published by
@@ -22,9 +22,6 @@ AM_SILENT_RULES([yes])
 AC_LANG([C])
 AC_PROG_CC
 AC_HEADER_STDC
-
-AC_CHECK_HEADERS([getopt.h])
-AC_CHECK_FUNCS([getopt_long])
 
 AC_CONFIG_HEADERS([config.h:config.in])
 
