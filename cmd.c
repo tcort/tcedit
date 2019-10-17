@@ -17,9 +17,20 @@
  */
 
 #include "cmd.h"
+#include "error.h"
 
 int tce_equals(struct context *ctx, struct input in) {
 	fprintf(ctx->out, "%zu\n", ctx->dot);
+	return 0;
+}
+
+int tce_H(struct context *ctx, struct input in) {
+	ctx->help_on = (ctx->help_on == 1) ? 0 : 1;
+	return 0;
+}
+
+int tce_h(struct context *ctx, struct input in) {
+	fprintf(ctx->out, "%s\n", tce_strerror(tce_errno));
 	return 0;
 }
 
@@ -35,6 +46,7 @@ int tce_Q(struct context *ctx, struct input in) {
 
 int tce_q(struct context *ctx, struct input in) {
 	if (ctx->text_dirty == 1) {
+		tce_errno = TCE_ERR_UNSAVED_CHANGES;
 		ctx->text_dirty = 0;
 		return -1;
 	}
@@ -44,6 +56,8 @@ int tce_q(struct context *ctx, struct input in) {
 
 struct command commands[NCOMMANDS] = {
 	{ .letter = '=', .action = tce_equals },
+	{ .letter = 'H', .action = tce_H },
+	{ .letter = 'h', .action = tce_h },
 	{ .letter = 'P', .action = tce_P },
 	{ .letter = 'Q', .action = tce_Q },
 	{ .letter = 'q', .action = tce_q }

@@ -16,19 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __TCE_CMD_H
-#define __TCE_CMD_H
-
+#include "buffer.h"
 #include "ctx.h"
-#include "parse.h"
+#include "lines.h"
 
-#define NCOMMANDS 6 
+void ctx_free(struct context *ctx) {
 
-struct command {
-        char letter;
-        int (*action) (struct context *ctx, struct input in);
-};
+	if (ctx != NULL) {
 
-extern struct command commands[NCOMMANDS];
+		if (ctx->text.head != NULL) {
+			ln_free(&ctx->text);
+		}
 
-#endif
+		if (ctx->text.buf != NULL) {
+			bf_free(ctx->text.buf);
+			ctx->text.buf = NULL;
+		}
+	}
+
+}
+

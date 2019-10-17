@@ -29,11 +29,14 @@ struct context {
 	FILE *in;
 	FILE *out;
 	size_t dot;
+	int help_on;
 	int prompt_on;
 	char *prompt;
 	int text_dirty;
 	int done;
 	struct lines text;
 };
+
+void ctx_free(struct context *ctx);
 
 #endif

@@ -16,19 +16,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __TCE_CMD_H
-#define __TCE_CMD_H
+#include "error.h"
 
-#include "ctx.h"
-#include "parse.h"
-
-#define NCOMMANDS 6 
-
-struct command {
-        char letter;
-        int (*action) (struct context *ctx, struct input in);
+char *tce_errlist[] = {
+	"OK",
+	"warning: text has changed since it was last saved",
+	"error: unknown error"
 };
 
-extern struct command commands[NCOMMANDS];
+int tce_nerror = sizeof(tce_errlist)/sizeof(char*);
+int tce_errno = TCE_ERR_OK;
 
-#endif
+char *tce_strerror(int code) {
+	if (code >= tce_nerror) {
+		code = TCE_ERR_UNKNOWN_ERROR;
+	}
+	return tce_errlist[code];
+}

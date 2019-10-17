@@ -25,13 +25,9 @@
 #include "buffer.h"
 #include "ctx.h"
 #include "cmd.h"
+#include "error.h"
 #include "io.h"
 #include "parse.h"
-
-static void print_version(struct context *ctx) {
-	fprintf(ctx->out, "%s\n", PACKAGE_STRING);
-	exit(EXIT_SUCCESS);
-}
 
 int main(int argc, char *argv[]) {
 
@@ -44,6 +40,7 @@ int main(int argc, char *argv[]) {
 		.in = stdin,
 		.out = stdout,
 		.dot = 0,
+		.help_on = 0,
 		.prompt_on = 0,
 		.prompt = "*",
 		.text_dirty = 0,
@@ -62,10 +59,12 @@ int main(int argc, char *argv[]) {
 				ctx.prompt_on = 1;
 				break;
 			case 'v':
-				print_version(&ctx);
+				fprintf(ctx.out, "%s\n", PACKAGE_STRING);
+				ctx_free(&ctx);
+				exit(EXIT_SUCCESS);
 				break;
 			default:
-				perror("?");
+				ctx_free(&ctx);
 				exit(EXIT_FAILURE);
 		}
 	}
@@ -76,8 +75,7 @@ int main(int argc, char *argv[]) {
 	do {
 		char *cmd = readaline(ctx.in, ctx.out, ctx.prompt_on ? ctx.prompt : "");
 		if (cmd == NULL) {
-			perror("?");
-			exit(EXIT_FAILURE);
+			break;
 		}
 		in = parse(cmd);
 		rc = -1;
@@ -88,6 +86,9 @@ int main(int argc, char *argv[]) {
 			}
 		}
 		if (rc != 0) {
+			if (ctx.help_on == 1) {
+				fprintf(ctx.out, "%s\n", tce_strerror(tce_errno));
+			}
 			fprintf(ctx.out, "?\n");
 		}
 		free(cmd);
@@ -103,10 +104,10 @@ int main(int argc, char *argv[]) {
 	ln_print(&ctx.text);
 	printf("%zu\n", ln_count(&ctx.text));
 	printf("%s\n", ln_getline(&ctx.text, 2)->pos);
+	printf("%d\n", tce_nerror);
 	/* end of playpen */
 
-	bf_free(ctx.text.buf);
-	ctx.text.buf = NULL;
+	ctx_free(&ctx);
 
 	return 0;
 }

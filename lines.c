@@ -34,14 +34,13 @@ void ln_print(struct lines *text) {
 
 }
 
-void ln_append(struct lines *text, char *str) {
+int ln_append(struct lines *text, char *str) {
 
 	struct line *ln;
 
 	ln = (struct line *) malloc(sizeof(struct line));
 	if (ln == NULL) {
-		perror("?");
-		exit(EXIT_FAILURE);
+		return -1;
 	}
 	bzero(ln, sizeof(struct line));
 
@@ -56,6 +55,8 @@ void ln_append(struct lines *text, char *str) {
 		text->tail->tail = ln;
 		text->tail = ln;
 	}
+
+	return 0;
 }
 
 struct line *ln_getline(struct lines *text, size_t lineno) {
@@ -87,4 +88,24 @@ size_t ln_count(struct lines *text) {
 
 	return i;
 
+}
+
+void ln_free(struct lines *text) {
+
+	struct line *cur = text->head;
+	struct line *old = text->head;
+
+	if (text->head == NULL && text->tail == NULL) {
+		return;
+	} else if (text->head == text->tail) {
+		free(text->head);
+		text->head = text->tail = NULL;
+		return;
+	}
+
+	do {
+		old = cur;
+		cur = cur->tail;
+		free(old);
+	} while (cur != NULL);
 }

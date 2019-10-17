@@ -20,7 +20,8 @@ tcedit_SOURCES = \
 	buffer.c buffer.h \
 	cmd.c cmd.h \
 	config.h \
-	ctx.h \
+	ctx.c ctx.h \
+	error.c error.h \
 	io.c io.h \
 	lines.c lines.h \
 	main.c \

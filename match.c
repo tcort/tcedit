@@ -25,7 +25,7 @@
 
 int match(char *subject, char *pattern, char *result[]) {
 
-	int		i;
+	int		i, j;
 	int		rc;
 	size_t		len;
 	regex_t		regex;
@@ -53,8 +53,12 @@ int match(char *subject, char *pattern, char *result[]) {
 		len = (size_t) matches[i].rm_eo - matches[i].rm_so;
 		result[i] = (char *)malloc(len + 1);
 		if (result[i] == NULL) {
-			perror("?");
-			exit(EXIT_FAILURE);
+			for (j = 0; j < i; j++) {
+				free(result[j]);
+				result[j] = NULL;
+			}
+			regfree(&regex);
+			return -1;
 		}
 		bzero(result[i], len + 1);
 		strncpy(result[i], subject + matches[i].rm_so, len);

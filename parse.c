@@ -40,7 +40,9 @@ struct input parse(char *command) {
 	}
 
 	for (i = 0; nmatches > 0 && i < nmatches; i++) {
-		free(result[i]);
+		if (result[i] != NULL) {
+			free(result[i]);
+		}
 	}
 
 	return in;

@@ -16,19 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __TCE_CMD_H
-#define __TCE_CMD_H
+#ifndef __TCE_ERROR_H
+#define __TCE_ERROR_H
 
-#include "ctx.h"
-#include "parse.h"
+#define TCE_ERR_OK 0
+#define TCE_ERR_UNSAVED_CHANGES 1
+#define TCE_ERR_UNKNOWN_ERROR 2
 
-#define NCOMMANDS 6 
+extern char *tce_errlist[];
+extern int tce_nerror;
+extern int tce_errno;
 
-struct command {
-        char letter;
-        int (*action) (struct context *ctx, struct input in);
-};
-
-extern struct command commands[NCOMMANDS];
+char *tce_strerror(int code);
 
 #endif

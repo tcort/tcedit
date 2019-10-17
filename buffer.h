@@ -28,23 +28,10 @@ struct buffer {
 	size_t incr;       /* increment to add when growing maxsize */
 };
 
-/* allocates a new struct buffer structure */
 struct buffer *bf_alloc(size_t size, size_t incr);
-
-/* adds the character ch to the end of the given struct buffer */
 void bf_addch(struct buffer *buf, char ch);
-
-/* adds the string str to the end of the given struct buffer */
 void bf_addstr(struct buffer *buf, char *str);
-
-/* re-initializes the given struct buffer, such that the next call to
-   bf_addch will put the character at the start of the buffer */
 void bf_clear(struct buffer *buf);
-
-/* tests that the given pointer is a valid struct buffer */
-void bf_valid(struct buffer *buf);
-
-/* de-allocates the struct buffer and any memory it may contain */
 void bf_free(struct buffer *buf);
 
 #endif

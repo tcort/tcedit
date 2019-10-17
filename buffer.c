@@ -73,8 +73,6 @@ struct buffer *bf_alloc(size_t size, size_t incr) {
 /* adds the character ch to the end of the given struct buffer */
 void bf_addch(struct buffer *buf, char ch) {
 
-	bf_valid(buf); /* check for valid struct buffer */
-
 	/* if the buffer is full */
 	if (buf->cursize ==  buf->maxsize) {
 
@@ -118,26 +116,9 @@ void bf_addstr(struct buffer *buf, char *str) {
    bf_addch will put the character at the start of the buffer */
 void bf_clear(struct buffer *buf) {
 
-	bf_valid(buf); /* check for valid struct buffer */
-
 	/* does not alter maxsize, buf, or incr */
 	buf->cursize = 0;
 	/* does not need to overwrite the existing contents */
-}
-
-/*
- * tests that the given pointer is a valid struct buffer
- *
- * buf is a pointer to the struct buffer to be tested
- */
-void bf_valid(struct buffer *buf) {
-
-	/* are all struct buffer values consistent with each other? */
-	if (buf == NULL || buf->buf == NULL || buf->cursize > buf->maxsize ||
-		buf->maxsize < 1 || buf->incr < 1) {
-		/* invalid buffer */
-		exit(EXIT_FAILURE);
-	}
 }
 
 /*

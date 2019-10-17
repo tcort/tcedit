@@ -33,9 +33,10 @@ struct lines {
 	struct buffer *buf;
 };
 
-void ln_append(struct lines *text, char *str);
+int ln_append(struct lines *text, char *str);
 void ln_print(struct lines *text);
 struct line *ln_getline(struct lines *text, size_t lineno);
 size_t ln_count(struct lines *text);
+void ln_free(struct lines *text);
 
 #endif
