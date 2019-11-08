@@ -18,9 +18,19 @@
 
 #include "cmd.h"
 #include "error.h"
+#include "shell.h"
 
 int tce_equals(struct context *ctx, struct input in) {
 	fprintf(ctx->out, "%zu\n", ctx->dot);
+	return 0;
+}
+
+int tce_exclaim(struct context *ctx, struct input in) {
+	if (in.params == NULL) {
+		return -1;
+	}
+	doshell(in.params);
+	fprintf(ctx->out, "!\n");
 	return 0;
 }
 
@@ -55,6 +65,7 @@ int tce_q(struct context *ctx, struct input in) {
 }
 
 struct command commands[NCOMMANDS] = {
+	{ .letter = '!', .action = tce_exclaim },
 	{ .letter = '=', .action = tce_equals },
 	{ .letter = 'H', .action = tce_H },
 	{ .letter = 'h', .action = tce_h },

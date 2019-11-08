@@ -18,33 +18,27 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
-#include "parse.h"
-#include "match.h"
+#include "shell.h"
 
-struct input parse(char *command) {
-	int i;
-	int rc;
-	char *result[NMATCHES];
-	int nmatches;
-	struct input in;
+int doshell(char *cmd) {
 
-	bzero(&in, sizeof(struct input));
+	int wstatus;
+	pid_t pid;
 
-	nmatches = match(command, "([0-9]*)?,?([0-9]*)?([A-Za-z\\=!])(.*)", result);
-	if (nmatches == 5) {
-		in.start = atoi(result[1]);
-		in.end = atoi(result[2]);
-		in.letter = result[3][0];
-		in.params = strdup(result[4]);
+	pid = fork();
+	if (pid < 0) {
+		return -1;
+	} else if (pid == 0) {
+		execl("/bin/sh", "sh", "-c", cmd, NULL);
+		exit(EXIT_FAILURE);
 	}
 
-	for (i = 0; nmatches > 0 && i < nmatches; i++) {
-		if (result[i] != NULL) {
-			free(result[i]);
-		}
-	}
+	waitpid(pid, &wstatus, 0);
 
-	return in;
+	return WEXITSTATUS(wstatus);
 }
+

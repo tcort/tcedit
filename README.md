@@ -25,6 +25,7 @@ Lines may be addressed as follows:
 
 | command              | description                                                                                                                       |
 | -------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `!`*command*         | Execute *command* with `sh -c "command"`. Prints `!` when `sh` exits.                                                             |
 | `H`                  | Toggle helpful error messages on/off. Initially the helpful error messages are turned off.                                        |
 | `h`                  | Print a helpful error message for the last error.                                                                                 |
 | `P`                  | Toggle command prompt on/off. Initially the prompt is off unless the `-p string` command line argument was given.                 |

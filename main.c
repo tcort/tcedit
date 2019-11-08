@@ -91,6 +91,10 @@ int main(int argc, char *argv[]) {
 			}
 			fprintf(ctx.out, "?\n");
 		}
+		if (in.params != NULL) {
+			free(in.params);
+			in.params = NULL;
+		}
 		free(cmd);
 	} while (!ctx.done);
 

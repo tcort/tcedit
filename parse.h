@@ -23,6 +23,7 @@ struct input {
 	int start;
 	int end;
 	char letter;
+	char *params;
 };
 
 struct input parse(char *command);

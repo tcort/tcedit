@@ -16,35 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#ifndef __TCE_SHELL_H
+#define __TCE_SHELL_H
 
-#include "parse.h"
-#include "match.h"
+int doshell(char *cmd);
 
-struct input parse(char *command) {
-	int i;
-	int rc;
-	char *result[NMATCHES];
-	int nmatches;
-	struct input in;
+#endif
 
-	bzero(&in, sizeof(struct input));
-
-	nmatches = match(command, "([0-9]*)?,?([0-9]*)?([A-Za-z\\=!])(.*)", result);
-	if (nmatches == 5) {
-		in.start = atoi(result[1]);
-		in.end = atoi(result[2]);
-		in.letter = result[3][0];
-		in.params = strdup(result[4]);
-	}
-
-	for (i = 0; nmatches > 0 && i < nmatches; i++) {
-		if (result[i] != NULL) {
-			free(result[i]);
-		}
-	}
-
-	return in;
-}

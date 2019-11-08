@@ -26,6 +26,7 @@ tcedit_SOURCES = \
 	lines.c lines.h \
 	main.c \
 	match.c match.h \
-	parse.c parse.h
+	parse.c parse.h \
+	shell.c shell.h
 
 man_MANS = tcedit.1
