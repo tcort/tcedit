@@ -22,7 +22,7 @@
 #include "ctx.h"
 #include "parse.h"
 
-#define NCOMMANDS 7
+#define NCOMMANDS 9
 
 struct command {
         char letter;

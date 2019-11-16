@@ -34,7 +34,7 @@ struct lines {
 };
 
 int ln_append(struct lines *text, char *str);
-void ln_print(struct lines *text);
+void ln_print(FILE *ostream, struct lines *text, int first, int last, int show_count);
 struct line *ln_getline(struct lines *text, size_t lineno);
 size_t ln_count(struct lines *text);
 void ln_free(struct lines *text);

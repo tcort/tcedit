@@ -28,6 +28,8 @@ Lines may be addressed as follows:
 | `!`*command*         | Execute *command* with `sh -c "command"`. Prints `!` when `sh` exits.                                                             |
 | `H`                  | Toggle helpful error messages on/off. Initially the helpful error messages are turned off.                                        |
 | `h`                  | Print a helpful error message for the last error.                                                                                 |
+| `n`                  | Print lines from the buffer with line numbers.                                                                                    |
 | `P`                  | Toggle command prompt on/off. Initially the prompt is off unless the `-p string` command line argument was given.                 |
+| `p`                  | Print lines from the buffer.                                                                                                      |
 | `Q`                  | Force quit. Always succeeds. Unsaved changes are lost.                                                                            |
 | `q`                  | Quit. Fails if there are unsaved changes. Succeeds if entered a second time with no changes in between. Unsaved changes are lost. |

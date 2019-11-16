@@ -1,3 +1,6 @@
 memory management
  - free memory when exiting due to error
  - cut down on exit() calls
+
+impl
+ - `=` command should set dot

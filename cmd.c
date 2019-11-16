@@ -44,8 +44,30 @@ int tce_h(struct context *ctx, struct input in) {
 	return 0;
 }
 
+int tce_n(struct context *ctx, struct input in) {
+	size_t nlines = ln_count(&ctx->text);
+	if (in.start < 1 || in.start > in.end || in.end > nlines || in.start > nlines) {
+		tce_errno = TCE_ERR_BAD_ADDR;
+		return -1;
+	}
+	ln_print(ctx->out, &ctx->text, in.start, in.end, 1);
+	ctx->dot = in.end;
+	return 0;
+}
+
 int tce_P(struct context *ctx, struct input in) {
 	ctx->prompt_on = !ctx->prompt_on;
+	return 0;
+}
+
+int tce_p(struct context *ctx, struct input in) {
+	size_t nlines = ln_count(&ctx->text);
+	if (in.start < 1 || in.start > in.end || in.end > nlines || in.start > nlines) {
+		tce_errno = TCE_ERR_BAD_ADDR;
+		return -1;
+	}
+	ln_print(ctx->out, &ctx->text, in.start, in.end, 0);
+	ctx->dot = in.end;
 	return 0;
 }
 
@@ -69,7 +91,9 @@ struct command commands[NCOMMANDS] = {
 	{ .letter = '=', .action = tce_equals },
 	{ .letter = 'H', .action = tce_H },
 	{ .letter = 'h', .action = tce_h },
+	{ .letter = 'n', .action = tce_n },
 	{ .letter = 'P', .action = tce_P },
+	{ .letter = 'p', .action = tce_p },
 	{ .letter = 'Q', .action = tce_Q },
 	{ .letter = 'q', .action = tce_q }
 };

@@ -24,12 +24,19 @@
 #include "buffer.h"
 #include "lines.h"
 
-void ln_print(struct lines *text) {
+void ln_print(FILE *ostream, struct lines *text, int first, int last, int show_count) {
 
+	int i;
 	struct line *cur;
 
-	for (cur = text->head; cur != NULL; cur = cur->tail) {
-		printf("%s\n", cur->pos);
+	for (cur = text->head, i = 1; cur != NULL && i <= last; cur = cur->tail, i++) {
+		if (first <= i && i <= last) {
+			if (show_count) {
+				fprintf(ostream, "%d\t%s\n", i, cur->pos);
+			} else {
+				fprintf(ostream, "%s\n", cur->pos);
+			}
+		}
 	}
 
 }

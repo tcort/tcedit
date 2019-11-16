@@ -38,6 +38,10 @@ struct input parse(char *command) {
 		in.end = atoi(result[2]);
 		in.letter = result[3][0];
 		in.params = strdup(result[4]);
+
+		if (in.end == 0) {
+			in.end = in.start;
+		}
 	}
 
 	for (i = 0; nmatches > 0 && i < nmatches; i++) {

@@ -72,6 +72,21 @@ int main(int argc, char *argv[]) {
 	argc -= optind;
 	argv += optind;
 
+	/* playpen for debugging/testing */
+	printf("%zu\n", ln_count(&ctx.text));
+	ln_append(&ctx.text, "Hello");
+	printf("%zu\n", ln_count(&ctx.text));
+	ln_append(&ctx.text, "Bonjour");
+	printf("%zu\n", ln_count(&ctx.text));
+	ln_append(&ctx.text, "Hola");
+printf("--\n");
+	ln_print(ctx.out, &ctx.text, 2, 3, 1);
+printf("--\n");
+	printf("%zu\n", ln_count(&ctx.text));
+	printf("%s\n", ln_getline(&ctx.text, 2)->pos);
+	printf("%d\n", tce_nerror);
+	/* end of playpen */
+
 	do {
 		char *cmd = readaline(ctx.in, ctx.out, ctx.prompt_on ? ctx.prompt : "");
 		if (cmd == NULL) {
@@ -98,18 +113,6 @@ int main(int argc, char *argv[]) {
 		free(cmd);
 	} while (!ctx.done);
 
-	/* playpen for debugging/testing */
-	printf("%zu\n", ln_count(&ctx.text));
-	ln_append(&ctx.text, "Hello");
-	printf("%zu\n", ln_count(&ctx.text));
-	ln_append(&ctx.text, "Bonjour");
-	printf("%zu\n", ln_count(&ctx.text));
-	ln_append(&ctx.text, "Hola");
-	ln_print(&ctx.text);
-	printf("%zu\n", ln_count(&ctx.text));
-	printf("%s\n", ln_getline(&ctx.text, 2)->pos);
-	printf("%d\n", tce_nerror);
-	/* end of playpen */
 
 	ctx_free(&ctx);
 

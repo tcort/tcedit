@@ -22,6 +22,7 @@
 #define TCE_ERR_OK 0
 #define TCE_ERR_UNSAVED_CHANGES 1
 #define TCE_ERR_UNKNOWN_ERROR 2
+#define TCE_ERR_BAD_ADDR 3
 
 extern char *tce_errlist[];
 extern int tce_nerror;
