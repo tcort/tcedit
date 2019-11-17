@@ -22,16 +22,15 @@
 
 #include "sig.h"
 
+int sighup_fired = 0;
+int sigint_fired = 0;
+
 void dohup(int signo) {
-	printf("SIGHUP\n");
-/* TODO if text dirty, write to 'tcedit.hup' and exit */
-	exit(1);
+	sighup_fired = 1;
 }
 
 void doint(int signo) {
-	printf("SIGINT\n");
-/* TODO  print "?\n", return to cmd mode, if in input mode keep text already input */
-	exit(1);
+	sigint_fired = 1;
 }
 
 void siginit(void) {

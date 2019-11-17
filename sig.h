@@ -3,4 +3,7 @@
 
 void siginit(void);
 
+extern int sighup_fired;
+extern int sigint_fired;
+
 #endif
