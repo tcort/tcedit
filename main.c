@@ -28,6 +28,7 @@
 #include "error.h"
 #include "io.h"
 #include "parse.h"
+#include "sig.h"
 
 int main(int argc, char *argv[]) {
 
@@ -51,6 +52,8 @@ int main(int argc, char *argv[]) {
 			.tail = NULL
 		}
 	};
+
+	siginit();
 
 	while ((optc = getopt(argc, argv, short_options)) != -1) {
 		switch (optc) {
