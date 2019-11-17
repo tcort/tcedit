@@ -34,6 +34,9 @@ char *readaline(FILE *input, FILE *output, char *prompt) {
 	char *line;
 
 	line = (char *) malloc(len);
+	if (line == NULL) {
+		return NULL;
+	}
 	bzero(line, len);
 
 	if (prompt != NULL && is_interactive(output)) {
