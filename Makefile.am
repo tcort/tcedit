@@ -27,6 +27,7 @@ tcedit_SOURCES = \
 	main.c \
 	match.c match.h \
 	parse.c parse.h \
+	re.c re.h \
 	shell.c shell.h \
 	sig.c sig.h
 
