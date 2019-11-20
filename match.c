@@ -60,7 +60,7 @@ int match(char *subject, char *pattern, char *result[]) {
 			regfree(&regex);
 			return -1;
 		}
-		bzero(result[i], len + 1);
+		memset(result[i], '\0', len + 1);
 		strncpy(result[i], subject + matches[i].rm_so, len);
 	}
 

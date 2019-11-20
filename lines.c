@@ -49,7 +49,7 @@ int ln_append(struct lines *text, char *str) {
 	if (ln == NULL) {
 		return -1;
 	}
-	bzero(ln, sizeof(struct line));
+	memset(ln, '\0', sizeof(struct line));
 
 	ln->pos = text->buf->buf + text->buf->cursize;
 	bf_addstr(text->buf, str);
@@ -68,7 +68,7 @@ int ln_append(struct lines *text, char *str) {
 
 struct line *ln_getline(struct lines *text, size_t lineno) {
 
-	int i;
+	size_t i;
 	struct line *cur;
 
 	if (text->head == NULL && text->tail == NULL) {

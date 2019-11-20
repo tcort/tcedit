@@ -26,11 +26,15 @@ int sighup_fired = 0;
 int sigint_fired = 0;
 
 void dohup(int signo) {
-	sighup_fired = 1;
+	if (signo == SIGHUP) {
+		sighup_fired = 1;
+	}
 }
 
 void doint(int signo) {
-	sigint_fired = 1;
+	if (signo == SIGINT) {
+		sigint_fired = 1;
+	}
 }
 
 void siginit(void) {

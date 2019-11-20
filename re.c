@@ -45,9 +45,11 @@ node_t *mknode(node_type_t type, node_value_t value, node_t *nodes[]) {
 	for (i = 0; i < MAX_CHILD_NODES; i++) {
 		n->nodes[i] = nodes[i];
 	}
+
+	return n;
 }
 
-void freenode(node_t *n) {
+void re_free(node_t *n) {
 	int i;
 
 	if (n == NULL) {
@@ -56,7 +58,7 @@ void freenode(node_t *n) {
 
 	for (i = 0; i < MAX_CHILD_NODES; i++) {
 		if (n->nodes[i] != NULL) {
-			freenode(n->nodes[i]);
+			re_free(n->nodes[i]);
 		}
 	}
 
@@ -66,7 +68,6 @@ void freenode(node_t *n) {
 
 node_t *parse_l_anchor(parser_t *p) {
 	char ch;
-	node_t *n;
 	node_value_t val;
 	node_t *nodes[MAX_CHILD_NODES];
 
@@ -82,8 +83,7 @@ node_t *parse_l_anchor(parser_t *p) {
 }
 
 node_t *parse_r_anchor(parser_t *p) {
-	char ch, eof;
-	node_t *n;
+	char ch;
 	node_value_t val;
 	node_t *nodes[MAX_CHILD_NODES];
 
@@ -98,17 +98,106 @@ node_t *parse_r_anchor(parser_t *p) {
 	return NULL;
 }
 
+node_t *parse_character_class(parser_t *p) {
+	(void) p;
+	return NULL;
+}
+
+node_t *parse_equivalence_class(parser_t *p) {
+	(void) p;
+	return NULL;
+}
+
+node_t *parse_collating_symbol(parser_t *p) {
+	(void) p;
+	return NULL;
+}
+
+node_t *parse_end_range(parser_t *p) {
+	(void) p;
+	return NULL;
+}
+
+node_t *parse_start_range(parser_t *p) {
+	(void) p;
+	return NULL;
+}
+
+node_t *parse_range_expression(parser_t *p) {
+	(void) p;
+	return NULL;
+}
+
+node_t *parse_single_expression(parser_t *p) {
+	(void) p;
+	return NULL;
+}
+
+node_t *parse_expression_term(parser_t *p) {
+	(void) p;
+	return NULL;
+}
+
+node_t *parse_follow_list(parser_t *p) {
+	(void) p;
+	return NULL;
+}
+
+node_t *parse_bracket_list(parser_t *p) {
+	(void) p;
+	return NULL;
+}
+
+node_t *parse_nonmatching_list(parser_t *p) {
+	(void) p;
+	return NULL;
+}
+
+node_t *parse_matching_list(parser_t *p) {
+	(void) p;
+	return NULL;
+}
+
+node_t *parse_bracket_expression(parser_t *p) {
+	(void) p;
+	return NULL;
+}
+
+node_t *parse_re_dupl_symbol(parser_t *p) {
+	(void) p;
+	return NULL;
+}
+
+node_t *parse_one_char_or_coll_elem_re(parser_t *p) {
+	(void) p;
+	return NULL;
+}
+
+node_t *parse_nondupl_re(parser_t *p) {
+	(void) p;
+	return NULL;
+}
+
+node_t *parse_simple_re(parser_t *p) {
+	(void) p;
+	return NULL;
+}
+
+node_t *parse_re_expression(parser_t *p) {
+	(void) p;
+	return NULL;
+}
+
 node_t *parse_basic_reg_exp(parser_t *p) {
 
 	int i;
-	node_t *n;
 	node_t *nodes[MAX_CHILD_NODES];
 	node_value_t value;
-	char ch;
 
 	memset(nodes, '\0', sizeof(node_t *) * MAX_CHILD_NODES);
 
 	nodes[0] = parse_l_anchor(p);
+	nodes[1] = parse_re_expression(p);
 	nodes[2] = parse_r_anchor(p);
 
 	if (nodes[0] != NULL || nodes[1] != NULL || nodes[2] != NULL) {
@@ -117,7 +206,7 @@ node_t *parse_basic_reg_exp(parser_t *p) {
 
 	for (i = 0; i < MAX_CHILD_NODES; i++) {
 		if (nodes[i] != NULL) {
-			freenode(nodes[i]);
+			re_free(nodes[i]);
 			nodes[i] = NULL;
 		}
 	}
@@ -142,20 +231,3 @@ node_t *re_compile(char *pattern) {
 
 	return n;
 }
-/*
-int main(int argc, char *argv[]) {
-
-	node_t *n;
-
-	if (argc != 3) {
-		fprintf(stderr, "usage: %s PATTERN SUBJECT\n", argv[0]);
-		exit(1);
-	}
-
-	n = re_compile(argv[1]);
-	fprintf(stdout, "%p\n", n);
-	freenode(n);
-
-	return 0;
-}
-*/

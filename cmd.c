@@ -21,7 +21,8 @@
 #include "shell.h"
 
 int tce_equals(struct context *ctx, struct input in) {
-	fprintf(ctx->out, "%zu\n", ctx->dot);
+	(void) in;
+	fprintf(ctx->out, "%lu\n", (unsigned long) ctx->dot);
 	return 0;
 }
 
@@ -35,11 +36,13 @@ int tce_exclaim(struct context *ctx, struct input in) {
 }
 
 int tce_H(struct context *ctx, struct input in) {
+	(void) in;
 	ctx->help_on = (ctx->help_on == 1) ? 0 : 1;
 	return 0;
 }
 
 int tce_h(struct context *ctx, struct input in) {
+	(void) in;
 	fprintf(ctx->out, "%s\n", tce_strerror(tce_errno));
 	return 0;
 }
@@ -56,6 +59,7 @@ int tce_n(struct context *ctx, struct input in) {
 }
 
 int tce_P(struct context *ctx, struct input in) {
+	(void) in;
 	ctx->prompt_on = !ctx->prompt_on;
 	return 0;
 }
@@ -72,11 +76,13 @@ int tce_p(struct context *ctx, struct input in) {
 }
 
 int tce_Q(struct context *ctx, struct input in) {
+	(void) in;
 	ctx->done = 1;
 	return 0;
 }
 
 int tce_q(struct context *ctx, struct input in) {
+	(void) in;
 	if (ctx->text_dirty == 1) {
 		tce_errno = TCE_ERR_UNSAVED_CHANGES;
 		ctx->text_dirty = 0;
@@ -87,13 +93,13 @@ int tce_q(struct context *ctx, struct input in) {
 }
 
 struct command commands[NCOMMANDS] = {
-	{ .letter = '!', .action = tce_exclaim },
-	{ .letter = '=', .action = tce_equals },
-	{ .letter = 'H', .action = tce_H },
-	{ .letter = 'h', .action = tce_h },
-	{ .letter = 'n', .action = tce_n },
-	{ .letter = 'P', .action = tce_P },
-	{ .letter = 'p', .action = tce_p },
-	{ .letter = 'Q', .action = tce_Q },
-	{ .letter = 'q', .action = tce_q }
+	{ '!', tce_exclaim },
+	{ '=', tce_equals },
+	{ 'H', tce_H },
+	{ 'h', tce_h },
+	{ 'n', tce_n },
+	{ 'P', tce_P },
+	{ 'p', tce_p },
+	{ 'Q', tce_Q },
+	{ 'q', tce_q }
 };

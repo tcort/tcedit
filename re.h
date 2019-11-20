@@ -50,4 +50,7 @@ typedef enum node_type node_type_t;
 typedef struct node node_t;
 typedef struct parser parser_t;
 
+node_t *re_compile(char *pattern);
+void re_free(node_t *n);
+
 #endif

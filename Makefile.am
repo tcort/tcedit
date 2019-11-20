@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+AM_CPPFLAGS = -Wall -Wextra -pedantic -ansi -D_POSIX_C_SOURCE=200809L
+
 bin_PROGRAMS = tcedit
 
 tcedit_SOURCES = \
@@ -29,6 +31,15 @@ tcedit_SOURCES = \
 	parse.c parse.h \
 	re.c re.h \
 	shell.c shell.h \
-	sig.c sig.h
+	sig.c sig.h \
+	tctest.h
 
 man_MANS = tcedit.1
+
+check_PROGRAMS = testre
+
+testre_SOURCES = tctest.h re.h re.c re.test.c
+testre_LDADD = -ldl -lelf
+testre_LDFLAGS = -rdynamic
+
+TESTS = $(check_PROGRAMS)

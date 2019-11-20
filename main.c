@@ -37,21 +37,19 @@ int main(int argc, char *argv[]) {
 	int		optc;
 	const char     *const short_options = "p:v";
 	struct input	in;
-	struct context	ctx = {
-		.in = stdin,
-		.out = stdout,
-		.dot = 0,
-		.help_on = 0,
-		.prompt_on = 0,
-		.prompt = "*",
-		.text_dirty = 0,
-		.done = 0,
-		.text = {
-			.buf = bf_alloc(8192, 4096),
-			.head = NULL,
-			.tail = NULL
-		}
-	};
+	struct context	ctx;
+
+	ctx.in = stdin,
+	ctx.out = stdout,
+	ctx.dot = 0,
+	ctx.help_on = 0,
+	ctx.prompt_on = 0,
+	ctx.prompt = "*",
+	ctx.text_dirty = 0,
+	ctx.done = 0,
+	ctx.text.head = NULL;
+	ctx.text.tail = NULL;
+	ctx.text.buf = bf_alloc(8192, 4096);
 
 	siginit();
 
@@ -76,16 +74,12 @@ int main(int argc, char *argv[]) {
 	argv += optind;
 
 	/* playpen for debugging/testing */
-	printf("%zu\n", ln_count(&ctx.text));
 	ln_append(&ctx.text, "Hello");
-	printf("%zu\n", ln_count(&ctx.text));
 	ln_append(&ctx.text, "Bonjour");
-	printf("%zu\n", ln_count(&ctx.text));
 	ln_append(&ctx.text, "Hola");
 printf("--\n");
 	ln_print(ctx.out, &ctx.text, 2, 3, 1);
 printf("--\n");
-	printf("%zu\n", ln_count(&ctx.text));
 	printf("%s\n", ln_getline(&ctx.text, 2)->pos);
 	printf("%d\n", tce_nerror);
 	/* end of playpen */

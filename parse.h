@@ -19,9 +19,11 @@
 #ifndef __TCE_PARSE_H
 #define __TCE_PARSE_H
 
+#include <stddef.h>
+
 struct input {
-	int start;
-	int end;
+	size_t start;
+	size_t end;
 	char letter;
 	char *params;
 };

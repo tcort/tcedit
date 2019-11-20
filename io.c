@@ -19,8 +19,10 @@
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <strings.h>
+#include <string.h>
 #include <unistd.h>
+
+#include "io.h"
 
 static int is_interactive(FILE *f) {
 	int fd = fileno(f);
@@ -37,7 +39,7 @@ char *readaline(FILE *input, FILE *output, char *prompt) {
 	if (line == NULL) {
 		return NULL;
 	}
-	bzero(line, len);
+	memset(line, '\0', len);
 
 	if (prompt != NULL && is_interactive(output)) {
 		fprintf(output, "%s", prompt);

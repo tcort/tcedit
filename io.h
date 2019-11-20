@@ -19,6 +19,12 @@
 #ifndef __TCE_IO_H
 #define __TCE_IO_H
 
+#include <stdio.h>
+
+#ifndef LINE_MAX
+#define LINE_MAX (2048)
+#endif
+
 char *readaline(FILE *input, FILE *output, char *prompt);
 
 #endif

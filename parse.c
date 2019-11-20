@@ -25,12 +25,11 @@
 
 struct input parse(char *command) {
 	int i;
-	int rc;
 	char *result[NMATCHES];
 	int nmatches;
 	struct input in;
 
-	bzero(&in, sizeof(struct input));
+	memset(&in, '\0', sizeof(struct input));
 
 	nmatches = match(command, "([0-9]*)?,?([0-9]*)?([A-Za-z\\=!])(.*)", result);
 	if (nmatches == 5) {

@@ -104,7 +104,7 @@ void bf_addch(struct buffer *buf, char ch) {
 
 /* adds the string str to the end of the given struct buffer */
 void bf_addstr(struct buffer *buf, char *str) {
-	int i;
+	size_t i;
 
 	/* add the characters one by one */
 	for (i = 0; i < strlen(str); i++) {
