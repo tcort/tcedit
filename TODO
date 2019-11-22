@@ -4,3 +4,9 @@ memory management
 
 impl
  - `=` command should set dot
+
+testing
+ - unit tests for everything?
+
+documentation
+ - improve manual page

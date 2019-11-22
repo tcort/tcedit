@@ -22,13 +22,13 @@
 
 #include "config.h"
 
-#include "buffer.h"
 #include "ctx.h"
 #include "cmd.h"
 #include "error.h"
 #include "io.h"
 #include "parse.h"
 #include "sig.h"
+#include "text.h"
 
 int main(int argc, char *argv[]) {
 
@@ -47,9 +47,7 @@ int main(int argc, char *argv[]) {
 	ctx.prompt = "*",
 	ctx.text_dirty = 0,
 	ctx.done = 0,
-	ctx.text.head = NULL;
-	ctx.text.tail = NULL;
-	ctx.text.buf = bf_alloc(8192, 4096);
+	ctx.text = text_new();
 
 	siginit();
 
@@ -73,17 +71,6 @@ int main(int argc, char *argv[]) {
 	argc -= optind;
 	argv += optind;
 
-	/* playpen for debugging/testing */
-	ln_append(&ctx.text, "Hello");
-	ln_append(&ctx.text, "Bonjour");
-	ln_append(&ctx.text, "Hola");
-printf("--\n");
-	ln_print(ctx.out, &ctx.text, 2, 3, 1);
-printf("--\n");
-	printf("%s\n", ln_getline(&ctx.text, 2)->pos);
-	printf("%d\n", tce_nerror);
-	/* end of playpen */
-
 	do {
 		char *cmd = readaline(ctx.in, ctx.out, ctx.prompt_on ? ctx.prompt : "");
 		if (cmd == NULL) {
@@ -93,6 +80,29 @@ printf("--\n");
 		rc = -1;
 		for (i = 0; i < NCOMMANDS; i++) {
 			if (commands[i].letter == in.letter) {
+				if (in.start == 0) {
+					switch (commands[i].default_addrs[0]) {
+						case ADDR_FIRST_LINE: 	in.start = 1; break;
+						case ADDR_CURRENT_LINE:	in.start = ctx.dot; break;
+						case ADDR_LAST_LINE:	in.start = text_count(ctx.text); break;
+						case ADDR_NEXT_LINE:	in.start = ctx.dot + 1; break;
+						case ADDR_NONE:		in.start = 0; break;
+						default:		in.start = 0; break;
+					}
+				}
+
+				if (in.end == 0) {
+					switch (commands[i].default_addrs[1]) {
+						case ADDR_FIRST_LINE: 	in.end = 1; break;
+						case ADDR_CURRENT_LINE:	in.end = ctx.dot; break;
+						case ADDR_LAST_LINE:	in.end = text_count(ctx.text); break;
+						case ADDR_NEXT_LINE:	in.end = ctx.dot + 1; break;
+						case ADDR_NONE:		in.end = 0; break;
+						default:		in.end = 0; break;
+					}
+
+				}
+
 				rc = commands[i].action(&ctx, in);
 				break;
 			}
@@ -108,6 +118,10 @@ printf("--\n");
 			in.params = NULL;
 		}
 		free(cmd);
+
+		if (feof(ctx.in) || ferror(ctx.in)) {
+			ctx.done = 1;
+		}
 	} while (!ctx.done);
 
 

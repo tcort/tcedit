@@ -24,6 +24,7 @@
 struct input {
 	size_t start;
 	size_t end;
+	int comma;
 	char letter;
 	char *params;
 };

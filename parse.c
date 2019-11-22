@@ -16,37 +16,43 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "parse.h"
-#include "match.h"
 
 struct input parse(char *command) {
-	int i;
-	char *result[NMATCHES];
-	int nmatches;
 	struct input in;
+	char *p;
 
 	memset(&in, '\0', sizeof(struct input));
 
-	nmatches = match(command, "([0-9]*)?,?([0-9]*)?([A-Za-z\\=!])(.*)", result);
-	if (nmatches == 5) {
-		in.start = atoi(result[1]);
-		in.end = atoi(result[2]);
-		in.letter = result[3][0];
-		in.params = strdup(result[4]);
+	p = command;
 
-		if (in.end == 0) {
-			in.end = in.start;
-		}
+	in.start = (unsigned long) atoi(p);
+	while (p != NULL && isdigit(*p)) {
+		++p;
 	}
 
-	for (i = 0; nmatches > 0 && i < nmatches; i++) {
-		if (result[i] != NULL) {
-			free(result[i]);
-		}
+	if (*p == ',') {
+		in.comma = 1;
+		++p;
+	}
+
+	in.end = (unsigned long) atoi(p);
+	while (p != NULL && isdigit(*p)) {
+		++p;
+	}
+
+	in.letter = *p;
+	++p;
+
+	in.params = strdup(p);
+
+	if (in.end == 0 && in.start != 0) {
+		in.end = in.start;
 	}
 
 	return in;

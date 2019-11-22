@@ -25,11 +25,14 @@ Lines may be addressed as follows:
 
 | command              | description                                                                                                                       |
 | -------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `.`                  | Print the number of the current line.
 | `!`*command*         | Execute *command* with `sh -c "command"`. Prints `!` when `sh` exits.                                                             |
+| `($)=`               | Print the number of the addressed line.
+| `($)a`               | Enter append mode. Input a line with a single `.` to exit append mode.
 | `H`                  | Toggle helpful error messages on/off. Initially the helpful error messages are turned off.                                        |
 | `h`                  | Print a helpful error message for the last error.                                                                                 |
-| `n`                  | Print lines from the buffer with line numbers.                                                                                    |
+| `(.,.)n`             | Print lines from the buffer with line numbers.                                                                                    |
 | `P`                  | Toggle command prompt on/off. Initially the prompt is off unless the `-p string` command line argument was given.                 |
-| `p`                  | Print lines from the buffer.                                                                                                      |
+| `(.,.)p`             | Print lines from the buffer.                                                                                                      |
 | `Q`                  | Force quit. Always succeeds. Unsaved changes are lost.                                                                            |
 | `q`                  | Quit. Fails if there are unsaved changes. Succeeds if entered a second time with no changes in between. Unsaved changes are lost. |

@@ -16,22 +16,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __TCE_BUFFER_H
-#define __TCE_BUFFER_H
+#ifndef __TCE_TEXT_H
+#define __TCE_TEXT_H
 
-#include <stdlib.h>
+struct text {
+	int scratchfd;
+	char tmpfile[32];
+	FILE *scratch;
 
-struct buffer {
-	char *buf;      /* pointer returned by malloc */
-	size_t maxsize;    /* size of space allocated by malloc */
-	size_t cursize;    /* amount of space currently used */
-	size_t incr;       /* increment to add when growing maxsize */
+	long *lines;
+	size_t incr;
+	size_t capacity;
+	size_t length;
+
+	char *line;
+	size_t cap;
+	ssize_t len;
 };
 
-struct buffer *bf_alloc(size_t size, size_t incr);
-void bf_addch(struct buffer *buf, char ch);
-void bf_addstr(struct buffer *buf, char *str);
-void bf_clear(struct buffer *buf);
-void bf_free(struct buffer *buf);
+struct text *text_new(void);
+size_t text_count(struct text *t);
+size_t text_delete(struct text *t, size_t begin, size_t end);
+void text_extend(struct text *t);
+int text_appendln(struct text *t, char *s);
+int text_append(struct text *t, struct text *tin);
+struct text *text_read(FILE *in, int period_ends_input);
+void text_write(struct text *t, FILE *out, size_t begin, size_t end, int show_lineno);
+char *text_getln(struct text *t, size_t lineno);
+int text_putln(struct text *t, size_t lineno, char *s);
+void text_free(struct text *t);
 
 #endif

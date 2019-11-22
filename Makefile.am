@@ -14,32 +14,29 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-AM_CPPFLAGS = -Wall -Wextra -pedantic -ansi -D_POSIX_C_SOURCE=200809L
+AM_CPPFLAGS = -Wall -Wextra -pedantic -ansi -D_POSIX_C_SOURCE=200809L -D_DEFAULT_SOURCE -g3
 
 bin_PROGRAMS = tcedit
 
 tcedit_SOURCES = \
-	buffer.c buffer.h \
 	cmd.c cmd.h \
 	config.h \
 	ctx.c ctx.h \
 	error.c error.h \
 	io.c io.h \
-	lines.c lines.h \
 	main.c \
-	match.c match.h \
 	parse.c parse.h \
-	re.c re.h \
 	shell.c shell.h \
+	text.c text.h \
 	sig.c sig.h \
 	tctest.h
 
 man_MANS = tcedit.1
 
-check_PROGRAMS = testre
-
-testre_SOURCES = tctest.h re.h re.c re.test.c
-testre_LDADD = -ldl -lelf
-testre_LDFLAGS = -rdynamic
-
-TESTS = $(check_PROGRAMS)
+#check_PROGRAMS = testxxx
+#
+#testxxx_SOURCES = tctest.h xxx.h xxx.c xxx.test.c
+#testxxx_LDADD = -ldl -lelf
+#testxxx_LDFLAGS = -rdynamic
+#
+#TESTS = $(check_PROGRAMS)

@@ -22,8 +22,7 @@
 #include <stdio.h>
 #include <stdint.h>
 
-#include "buffer.h"
-#include "lines.h"
+#include "text.h"
 
 struct context {
 	FILE *in;
@@ -34,7 +33,7 @@ struct context {
 	char *prompt;
 	int text_dirty;
 	int done;
-	struct lines text;
+	struct text *text;
 };
 
 void ctx_free(struct context *ctx);

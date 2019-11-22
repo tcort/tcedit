@@ -22,11 +22,20 @@
 #include "ctx.h"
 #include "parse.h"
 
-#define NCOMMANDS 9
+#define NCOMMANDS (12)
+
+enum address_default {
+	ADDR_FIRST_LINE = '1',
+	ADDR_CURRENT_LINE = '.',
+	ADDR_LAST_LINE = '$',
+	ADDR_NEXT_LINE = 'N',
+	ADDR_NONE = '0'
+};
 
 struct command {
         char letter;
         int (*action) (struct context *ctx, struct input in);
+	enum address_default default_addrs[2];
 };
 
 extern struct command commands[NCOMMANDS];

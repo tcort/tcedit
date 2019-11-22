@@ -16,23 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "buffer.h"
 #include "ctx.h"
-#include "lines.h"
+#include "text.h"
 
 void ctx_free(struct context *ctx) {
-
 	if (ctx != NULL) {
-
-		if (ctx->text.head != NULL) {
-			ln_free(&ctx->text);
-		}
-
-		if (ctx->text.buf != NULL) {
-			bf_free(ctx->text.buf);
-			ctx->text.buf = NULL;
+		if (ctx->text != NULL) {
+			text_free(ctx->text);
 		}
 	}
-
 }
 

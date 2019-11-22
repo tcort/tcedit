@@ -20,9 +20,14 @@
 #include "error.h"
 #include "shell.h"
 
-int tce_equals(struct context *ctx, struct input in) {
+int tce_dot(struct context *ctx, struct input in) {
 	(void) in;
-	fprintf(ctx->out, "%lu\n", (unsigned long) ctx->dot);
+	fprintf(ctx->out, "%lu\n", ctx->dot);
+	return 0;
+}
+
+int tce_equals(struct context *ctx, struct input in) {
+	fprintf(ctx->out, "%lu\n", in.start);
 	return 0;
 }
 
@@ -32,6 +37,45 @@ int tce_exclaim(struct context *ctx, struct input in) {
 	}
 	doshell(in.params);
 	fprintf(ctx->out, "!\n");
+	return 0;
+}
+
+int tce_a(struct context *ctx, struct input in) {
+	int rc;
+	struct text *t;
+	(void) in;
+
+/* TODO append to specific line */
+
+	t = text_read(ctx->in, 1);
+	if (t == NULL) {
+		return -1;
+	}
+
+	rc = text_append(ctx->text, t);
+	if (rc == -1) {
+		text_free(t);
+		return -1;
+	}
+
+	ctx->text_dirty = 1;
+	ctx->dot = text_count(ctx->text);
+
+	text_free(t);
+
+	return 0;
+}
+
+int tce_d(struct context *ctx, struct input in) {
+	size_t nlines = text_count(ctx->text);
+	if (in.start < 1 || in.start > in.end || in.end > nlines || in.start > nlines) {
+		tce_errno = TCE_ERR_BAD_ADDR;
+		return -1;
+	}
+
+	ctx->dot = text_delete(ctx->text, in.start, in.end);
+	ctx->text_dirty = 1;
+
 	return 0;
 }
 
@@ -48,12 +92,12 @@ int tce_h(struct context *ctx, struct input in) {
 }
 
 int tce_n(struct context *ctx, struct input in) {
-	size_t nlines = ln_count(&ctx->text);
+	size_t nlines = text_count(ctx->text);
 	if (in.start < 1 || in.start > in.end || in.end > nlines || in.start > nlines) {
 		tce_errno = TCE_ERR_BAD_ADDR;
 		return -1;
 	}
-	ln_print(ctx->out, &ctx->text, in.start, in.end, 1);
+	text_write(ctx->text, ctx->out, in.start, in.end, 1);
 	ctx->dot = in.end;
 	return 0;
 }
@@ -65,12 +109,12 @@ int tce_P(struct context *ctx, struct input in) {
 }
 
 int tce_p(struct context *ctx, struct input in) {
-	size_t nlines = ln_count(&ctx->text);
+	size_t nlines = text_count(ctx->text);
 	if (in.start < 1 || in.start > in.end || in.end > nlines || in.start > nlines) {
 		tce_errno = TCE_ERR_BAD_ADDR;
 		return -1;
 	}
-	ln_print(ctx->out, &ctx->text, in.start, in.end, 0);
+	text_write(ctx->text, ctx->out, in.start, in.end, 0);
 	ctx->dot = in.end;
 	return 0;
 }
@@ -93,13 +137,16 @@ int tce_q(struct context *ctx, struct input in) {
 }
 
 struct command commands[NCOMMANDS] = {
-	{ '!', tce_exclaim },
-	{ '=', tce_equals },
-	{ 'H', tce_H },
-	{ 'h', tce_h },
-	{ 'n', tce_n },
-	{ 'P', tce_P },
-	{ 'p', tce_p },
-	{ 'Q', tce_Q },
-	{ 'q', tce_q }
+	{ '.', tce_dot,		{ ADDR_NONE,		ADDR_NONE } },
+	{ '!', tce_exclaim,	{ ADDR_NONE,		ADDR_NONE } },
+	{ '=', tce_equals,	{ ADDR_LAST_LINE,	ADDR_NONE } },
+	{ 'a', tce_a,		{ ADDR_CURRENT_LINE,	ADDR_NONE } },
+	{ 'd', tce_d,		{ ADDR_CURRENT_LINE,	ADDR_CURRENT_LINE } },
+	{ 'H', tce_H,		{ ADDR_NONE,		ADDR_NONE } },
+	{ 'h', tce_h,		{ ADDR_NONE,		ADDR_NONE } },
+	{ 'n', tce_n,		{ ADDR_CURRENT_LINE,	ADDR_CURRENT_LINE } },
+	{ 'P', tce_P,		{ ADDR_NONE,		ADDR_NONE } },
+	{ 'p', tce_p,		{ ADDR_CURRENT_LINE,    ADDR_CURRENT_LINE } },
+	{ 'Q', tce_Q, 		{ ADDR_NONE,		ADDR_NONE } },
+	{ 'q', tce_q, 		{ ADDR_NONE,		ADDR_NONE } }
 };
