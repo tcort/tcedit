@@ -21,6 +21,8 @@
 
 #include <stddef.h>
 
+#include "ctx.h"
+
 struct input {
 	size_t start;
 	size_t end;
@@ -29,6 +31,6 @@ struct input {
 	char *params;
 };
 
-struct input parse(char *command);
+struct input parse(struct context *ctx, char *command);
 
 #endif

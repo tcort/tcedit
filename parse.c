@@ -21,9 +21,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "ctx.h"
 #include "parse.h"
+#include "text.h"
 
-struct input parse(char *command) {
+struct input parse(struct context *ctx, char *command) {
 	struct input in;
 	char *p;
 
@@ -51,7 +53,10 @@ struct input parse(char *command) {
 
 	in.params = strdup(p);
 
-	if (in.end == 0 && in.start != 0) {
+	if (in.end == 0 && in.start == 0 && in.comma == 1) {
+		in.start = 1;
+		in.end = text_count(ctx->text);
+	} else if (in.end == 0 && in.start != 0) {
 		in.end = in.start;
 	}
 

@@ -76,7 +76,7 @@ int main(int argc, char *argv[]) {
 		if (cmd == NULL) {
 			break;
 		}
-		in = parse(cmd);
+		in = parse(&ctx, cmd);
 		rc = -1;
 		for (i = 0; i < NCOMMANDS; i++) {
 			if (commands[i].letter == in.letter) {
