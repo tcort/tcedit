@@ -25,10 +25,11 @@ Lines may be addressed as follows:
 
 | command              | description                                                                                                                       |
 | -------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| `.`                  | Print the number of the current line.
+| `.`                  | Print the number of the current line.                                                                                             |
 | `!`*command*         | Execute *command* with `sh -c "command"`. Prints `!` when `sh` exits.                                                             |
-| `($)=`               | Print the number of the addressed line.
-| `($)a`               | Enter append mode. Input a line with a single `.` to exit append mode.
+| `($)=`               | Print the number of the addressed line.                                                                                           |
+| `($)a`               | Enter append mode. Input a line with a single `.` to exit append mode.                                                            |
+| `(.,.)d`             | Delete the addressed line(s) from the buffer.                                                                                     |
 | `H`                  | Toggle helpful error messages on/off. Initially the helpful error messages are turned off.                                        |
 | `h`                  | Print a helpful error message for the last error.                                                                                 |
 | `(.,.)n`             | Print lines from the buffer with line numbers.                                                                                    |

@@ -22,7 +22,7 @@
 #include "ctx.h"
 #include "parse.h"
 
-#define NCOMMANDS (12)
+#define NCOMMANDS (14)
 
 enum address_default {
 	ADDR_FIRST_LINE = '1',

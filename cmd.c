@@ -136,6 +136,22 @@ int tce_q(struct context *ctx, struct input in) {
 	return 0;
 }
 
+int tce_r(struct context *ctx, struct input in) {
+
+	(void) ctx;
+	(void) in;
+
+	return 0;
+}
+
+int tce_w(struct context *ctx, struct input in) {
+
+	(void) ctx;
+	(void) in;
+
+	return 0;
+}
+
 struct command commands[NCOMMANDS] = {
 	{ '.', tce_dot,		{ ADDR_NONE,		ADDR_NONE } },
 	{ '!', tce_exclaim,	{ ADDR_NONE,		ADDR_NONE } },
@@ -148,5 +164,7 @@ struct command commands[NCOMMANDS] = {
 	{ 'P', tce_P,		{ ADDR_NONE,		ADDR_NONE } },
 	{ 'p', tce_p,		{ ADDR_CURRENT_LINE,    ADDR_CURRENT_LINE } },
 	{ 'Q', tce_Q, 		{ ADDR_NONE,		ADDR_NONE } },
-	{ 'q', tce_q, 		{ ADDR_NONE,		ADDR_NONE } }
+	{ 'q', tce_q, 		{ ADDR_NONE,		ADDR_NONE } },
+	{ 'r', tce_r,		{ ADDR_FIRST_LINE,      ADDR_LAST_LINE } },
+	{ 'w', tce_w,		{ ADDR_FIRST_LINE,      ADDR_LAST_LINE } }
 };

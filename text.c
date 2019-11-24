@@ -17,6 +17,7 @@
  */
 
 #include <errno.h>
+#include <malloc.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -137,6 +138,27 @@ struct text *text_read(FILE *in, int period_ends_input) {
 	}
 
 	return t;
+}
+
+struct text *text_readfile(char *filepath) {
+
+	FILE *in;
+	struct text *t;
+
+	in = fopen(filepath, "r");
+	if (in == NULL) {
+		return NULL;
+	}
+
+	t = text_read(in, 0);
+	if (t == NULL) {
+		fclose(in);
+		return NULL;
+	}
+
+	fclose(in);
+	return t;
+
 }
 
 void text_write(struct text *t, FILE *out, size_t begin, size_t end, int show_lineno) {
