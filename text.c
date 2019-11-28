@@ -17,7 +17,9 @@
  */
 
 #include <errno.h>
+#ifdef HAVE_MALLOC_H
 #include <malloc.h>
+#endif
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -81,7 +83,11 @@ size_t text_delete(struct text *t, size_t begin, size_t end) {
 
 void text_extend(struct text *t) {
 	t->capacity += t->incr;
+#ifdef HAVE_REALLOCARRAY
 	t->lines = (long *) reallocarray(t->lines, t->capacity, sizeof(long));
+#else /* fall back to realloc */
+	t->lines = (long *) realloc(t->lines, t->capacity * sizeof(long));
+#endif
 }
 
 int text_appendln(struct text *t, char *s) {
