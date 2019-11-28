@@ -50,7 +50,9 @@ struct input parse(struct context *ctx, char *command) {
 
 	in.letter = *p;
 	++p;
-
+	while (p != NULL && *p == ' ') {
+		++p;
+	}
 	in.params = strdup(p);
 
 	if (in.end == 0 && in.start == 0 && in.comma == 1) {

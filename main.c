@@ -48,6 +48,7 @@ int main(int argc, char *argv[]) {
 	ctx.text_dirty = 0,
 	ctx.done = 0,
 	ctx.text = text_new();
+	ctx.filename[0] = '\0'; /* default to not set */
 
 	siginit();
 

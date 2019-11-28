@@ -34,6 +34,7 @@ struct context {
 	int text_dirty;
 	int done;
 	struct text *text;
+	char filename[FILENAME_MAX+1];
 };
 
 void ctx_free(struct context *ctx);

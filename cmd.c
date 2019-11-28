@@ -79,6 +79,20 @@ int tce_d(struct context *ctx, struct input in) {
 	return 0;
 }
 
+int tce_f(struct context *ctx, struct input in) {
+	if (in.params[0] == '\0') {
+		if (ctx->filename[0] == '\0') {
+			tce_errno = TCE_ERR_FILENAME_NOT_SET;
+			return -1;
+		}
+		fprintf(ctx->out, "%s\n", ctx->filename);
+	} else {
+		snprintf(ctx->filename, FILENAME_MAX+1, "%s", in.params);
+	}
+
+	return 0;
+}
+
 int tce_H(struct context *ctx, struct input in) {
 	(void) in;
 	ctx->help_on = (ctx->help_on == 1) ? 0 : 1;
@@ -146,8 +160,27 @@ int tce_r(struct context *ctx, struct input in) {
 
 int tce_w(struct context *ctx, struct input in) {
 
-	(void) ctx;
-	(void) in;
+	char *filename;
+	FILE *out;
+
+	/* use filename parameter or fall back to default filename */
+	filename = (in.params[0] == '\0') ? ctx->filename : in.params;
+	if (filename[0] == '\0') { /* no parameter and no default */
+		tce_errno = TCE_ERR_FILENAME_NOT_SET;
+		return -1;
+	}
+
+	out = fopen(filename, "w");
+	if (out == NULL) {
+		tce_errno = TCE_ERR_WRITE_FAILED;
+		return -1;
+	}
+
+	text_write(ctx->text, out, in.start, in.end, 0);
+	fclose(out);
+
+	ctx->dot = in.end;
+	ctx->text_dirty = 0;
 
 	return 0;
 }
@@ -158,6 +191,7 @@ struct command commands[NCOMMANDS] = {
 	{ '=', tce_equals,	{ ADDR_LAST_LINE,	ADDR_NONE } },
 	{ 'a', tce_a,		{ ADDR_CURRENT_LINE,	ADDR_NONE } },
 	{ 'd', tce_d,		{ ADDR_CURRENT_LINE,	ADDR_CURRENT_LINE } },
+        { 'f', tce_f,           { ADDR_NONE,            ADDR_NONE } },
 	{ 'H', tce_H,		{ ADDR_NONE,		ADDR_NONE } },
 	{ 'h', tce_h,		{ ADDR_NONE,		ADDR_NONE } },
 	{ 'n', tce_n,		{ ADDR_CURRENT_LINE,	ADDR_CURRENT_LINE } },

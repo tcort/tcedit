@@ -22,7 +22,9 @@ char *tce_errlist[] = {
 	"OK",
 	"warning: text has changed since it was last saved",
 	"error: unknown error",
-	"bad address"
+	"bad address",
+	"write failed",
+	"filename not set"
 };
 
 int tce_nerror = sizeof(tce_errlist)/sizeof(char*);
