@@ -31,27 +31,21 @@ static int is_interactive(FILE *f) {
 
 char *readaline(FILE *input, FILE *output, char *prompt) {
 
-	int i;
-	int len = LINE_MAX + 1;
-	char *line;
-
-	line = (char *) malloc(len);
-	if (line == NULL) {
-		return NULL;
-	}
-	memset(line, '\0', len);
+	char *line = NULL;
+	size_t cap = 0;
+	ssize_t len;
 
 	if (prompt != NULL && is_interactive(output)) {
 		fprintf(output, "%s", prompt);
 		fflush(output);
 	}
 
-	for (i = 0; !feof(input) && !ferror(input) && i < (len - 1); i++) {
-		line[i] = fgetc(input);
-		if (line[i] == '\n') {
-			line[i] = '\0';
-			break;
+	len = getline(&line, &cap, input);
+	if (len <= 0) {
+		if (line != NULL) {
+			free(line);
 		}
+		return NULL;
 	}
 
 	return line;
