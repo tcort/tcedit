@@ -54,6 +54,12 @@ struct input parse(struct context *ctx, char *command) {
 		++p;
 	}
 	in.params = strdup(p);
+	for (p = in.params; *p != '\0'; p++) {
+		if (*p == '\n') {
+			*p = '\0';
+		}
+	}
+
 
 	if (in.end == 0 && in.start == 0 && in.comma == 1) {
 		in.start = 1;

@@ -38,4 +38,5 @@ Lines may be addressed as follows:
 | `(.,.)p`               | Print lines from the buffer.                                                                                                      |
 | `Q`                    | Force quit. Always succeeds. Unsaved changes are lost.                                                                            |
 | `q`                    | Quit. Fails if there are unsaved changes. Succeeds if entered a second time with no changes in between. Unsaved changes are lost. |
-| `(1,$)w [filename.txt]`| Write the text to a file. A filename must be given if one has not been set (either via cmd line args or `f
+| `(1,$)r [filename.txt]`| Read the text of a file into the buffer. A filename must be given if one has not been set (either via cmd line args or `f`)
+| `(1,$)w [filename.txt]`| Write the text to a file. A filename must be given if one has not been set (either via cmd line args or `f`)

@@ -25,6 +25,7 @@
 #define TCE_ERR_BAD_ADDR 3
 #define TCE_ERR_WRITE_FAILED 4
 #define TCE_ERR_FILENAME_NOT_SET 5
+#define TCE_ERR_READ_FAILED 6
 
 extern char *tce_errlist[];
 extern int tce_nerror;

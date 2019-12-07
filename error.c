@@ -24,7 +24,8 @@ char *tce_errlist[] = {
 	"error: unknown error",
 	"bad address",
 	"write failed",
-	"filename not set"
+	"filename not set",
+	"read failed"
 };
 
 int tce_nerror = sizeof(tce_errlist)/sizeof(char*);

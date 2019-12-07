@@ -152,8 +152,41 @@ int tce_q(struct context *ctx, struct input in) {
 
 int tce_r(struct context *ctx, struct input in) {
 
-	(void) ctx;
-	(void) in;
+	int rc;
+	struct text *t;
+	char *filename;
+	FILE *input;
+
+	/* use filename parameter or fall back to default filename */
+	filename = (in.params[0] == '\0') ? ctx->filename : in.params;
+	if (filename[0] == '\0') { /* no parameter and no default */
+		tce_errno = TCE_ERR_FILENAME_NOT_SET;
+		return -1;
+	}
+
+	input = fopen(filename, "r");
+	if (input == NULL) {
+		tce_errno = TCE_ERR_READ_FAILED;
+		return -1;
+	}
+
+	t = text_read(input, 0);
+	if (t == NULL) {
+		return -1;
+	}
+
+	rc = text_append(ctx->text, t);
+	if (rc == -1) {
+		text_free(t);
+		fclose(input);
+		return -1;
+	}
+
+	ctx->text_dirty = 1;
+	ctx->dot = text_count(ctx->text);
+
+	text_free(t);
+	fclose(input);
 
 	return 0;
 }
