@@ -5,6 +5,7 @@ memory management
 impl
  - `=` command should set dot
  - `r`/`w` output byte counts
+ - `r`/`w` to/from a program (r !ls)
 
 testing
  - unit tests for everything?
