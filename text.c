@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "error.h"
 #include "text.h"
 
 struct text *text_new(void) {
@@ -90,28 +91,37 @@ void text_extend(struct text *t) {
 #endif
 }
 
-int text_appendln(struct text *t, char *s) {
+int text_appendln(struct text *t, char *s, size_t where) {
 
+	size_t i;
 	size_t nitems;
+
+	if (where < 1 || where > t->length) {
+		tce_errno = TCE_ERR_BAD_ADDR;
+	}
 
 	if (t->length + 1 >= t->capacity) {
 		text_extend(t);
 	}
 
+	t->length++;
+	for (i = t->length; i >= where; i--) {
+		t->lines[i] = t->lines[i-1];
+	}
+
 	fseek(t->scratch, 0, SEEK_END);
-	t->lines[++t->length] = ftell(t->scratch);
+	t->lines[where] = ftell(t->scratch);
 	nitems = fwrite(s, sizeof(char), strlen(s), t->scratch);
 	return nitems == strlen(s) ? 0 : -1;
-
 }
 
-int text_append(struct text *t, struct text *tin) {
+int text_append(struct text *t, struct text *tin, size_t where) {
 
 	size_t i;
 
 	for (i = 1; i <= text_count(tin); i++) {
 		int rc;
-		rc = text_appendln(t, text_getln(tin, i));
+		rc = text_appendln(t, text_getln(tin, i), where+i);
 		if (rc == -1) {
 			return -1;
 		}
@@ -123,20 +133,21 @@ int text_append(struct text *t, struct text *tin) {
 struct text *text_read(FILE *in, int period_ends_input) {
 
 	struct text *t;
+	size_t i;
 
 	t = text_new();
 	if (t == NULL) {
 		return NULL;
 	}
 
-	while ((t->len = getline(&t->line, &t->cap, in)) > 0) {
+	for (i = 1; (t->len = getline(&t->line, &t->cap, in)) > 0; i++) {
 		int rc;
 
 		if (t->line[0] == '.' && t->line[1] == '\n' && period_ends_input == 1) {
 			break;
 		} 
 
-		rc = text_appendln(t, t->line);
+		rc = text_appendln(t, t->line, i);
 		if (rc == -1) {
 			text_free(t);
 			return NULL;

@@ -45,14 +45,12 @@ int tce_a(struct context *ctx, struct input in) {
 	struct text *t;
 	(void) in;
 
-/* TODO append to specific line */
-
 	t = text_read(ctx->in, 1);
 	if (t == NULL) {
 		return -1;
 	}
 
-	rc = text_append(ctx->text, t);
+	rc = text_append(ctx->text, t, in.start);
 	if (rc == -1) {
 		text_free(t);
 		return -1;
@@ -102,6 +100,30 @@ int tce_H(struct context *ctx, struct input in) {
 int tce_h(struct context *ctx, struct input in) {
 	(void) in;
 	fprintf(ctx->out, "%s\n", tce_strerror(tce_errno));
+	return 0;
+}
+
+int tce_i(struct context *ctx, struct input in) {
+	int rc;
+	struct text *t;
+	(void) in;
+
+	t = text_read(ctx->in, 1);
+	if (t == NULL) {
+		return -1;
+	}
+
+	rc = text_append(ctx->text, t, in.start - 1);
+	if (rc == -1) {
+		text_free(t);
+		return -1;
+	}
+
+	ctx->text_dirty = 1;
+	ctx->dot = text_count(ctx->text);
+
+	text_free(t);
+
 	return 0;
 }
 
@@ -175,7 +197,7 @@ int tce_r(struct context *ctx, struct input in) {
 		return -1;
 	}
 
-	rc = text_append(ctx->text, t);
+	rc = text_append(ctx->text, t, in.start);
 	if (rc == -1) {
 		text_free(t);
 		fclose(input);
@@ -227,6 +249,7 @@ struct command commands[NCOMMANDS] = {
         { 'f', tce_f,           { ADDR_NONE,            ADDR_NONE } },
 	{ 'H', tce_H,		{ ADDR_NONE,		ADDR_NONE } },
 	{ 'h', tce_h,		{ ADDR_NONE,		ADDR_NONE } },
+	{ 'i', tce_i,		{ ADDR_CURRENT_LINE,	ADDR_NONE } },
 	{ 'n', tce_n,		{ ADDR_CURRENT_LINE,	ADDR_CURRENT_LINE } },
 	{ 'P', tce_P,		{ ADDR_NONE,		ADDR_NONE } },
 	{ 'p', tce_p,		{ ADDR_CURRENT_LINE,    ADDR_CURRENT_LINE } },

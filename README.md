@@ -33,6 +33,7 @@ Lines may be addressed as follows:
 | `f [filename.txt]`     | Set the default filename. If no filename is given, print the current default filename.                                            |
 | `H`                    | Toggle helpful error messages on/off. Initially the helpful error messages are turned off.                                        |
 | `h`                    | Print a helpful error message for the last error.                                                                                 |
+| `($)i`                 | Enter insert mode. Input a line with a single `.` to exit insert mode.                                                            |
 | `(.,.)n`               | Print lines from the buffer with line numbers.                                                                                    |
 | `P`                    | Toggle command prompt on/off. Initially the prompt is off unless the `-p string` command line argument was given.                 |
 | `(.,.)p`               | Print lines from the buffer.                                                                                                      |
