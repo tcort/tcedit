@@ -20,6 +20,24 @@
 #include "error.h"
 #include "shell.h"
 
+int tce_dot(struct context *ctx, struct input in);
+int tce_equals(struct context *ctx, struct input in);
+int tce_exclaim(struct context *ctx, struct input in);
+int tce_a(struct context *ctx, struct input in);
+int tce_c(struct context *ctx, struct input in);
+int tce_d(struct context *ctx, struct input in);
+int tce_f(struct context *ctx, struct input in);
+int tce_H(struct context *ctx, struct input in);
+int tce_h(struct context *ctx, struct input in);
+int tce_i(struct context *ctx, struct input in);
+int tce_n(struct context *ctx, struct input in);
+int tce_P(struct context *ctx, struct input in);
+int tce_p(struct context *ctx, struct input in);
+int tce_Q(struct context *ctx, struct input in);
+int tce_q(struct context *ctx, struct input in);
+int tce_r(struct context *ctx, struct input in);
+int tce_w(struct context *ctx, struct input in);
+
 int tce_dot(struct context *ctx, struct input in) {
 	(void) in;
 	fprintf(ctx->out, "%lu\n", ctx->dot);
@@ -43,7 +61,6 @@ int tce_exclaim(struct context *ctx, struct input in) {
 int tce_a(struct context *ctx, struct input in) {
 	int rc;
 	struct text *t;
-	(void) in;
 
 	t = text_read(ctx->in, 1);
 	if (t == NULL) {
@@ -61,6 +78,35 @@ int tce_a(struct context *ctx, struct input in) {
 
 	text_free(t);
 
+	return 0;
+}
+
+int tce_c(struct context *ctx, struct input in) {
+	int rc;
+	struct text *t;
+	size_t nlines = text_count(ctx->text);
+	if (in.start < 1 || in.start > in.end || in.end > nlines || in.start > nlines) {
+		tce_errno = TCE_ERR_BAD_ADDR;
+		return -1;
+	}
+
+	ctx->dot = text_delete(ctx->text, in.start, in.end);
+
+	t = text_read(ctx->in, 1);
+	if (t == NULL) {
+		return -1;
+	}
+
+	rc = text_append(ctx->text, t, in.start - 1);
+	if (rc == -1) {
+		text_free(t);
+		return -1;
+	}
+
+	ctx->text_dirty = 1;
+	ctx->dot = text_count(ctx->text);
+
+	text_free(t);
 	return 0;
 }
 
@@ -106,7 +152,11 @@ int tce_h(struct context *ctx, struct input in) {
 int tce_i(struct context *ctx, struct input in) {
 	int rc;
 	struct text *t;
-	(void) in;
+	size_t nlines = text_count(ctx->text);
+	if (in.start < 1 || in.start > in.end || in.end > nlines || in.start > nlines) {
+		tce_errno = TCE_ERR_BAD_ADDR;
+		return -1;
+	}
 
 	t = text_read(ctx->in, 1);
 	if (t == NULL) {
@@ -245,6 +295,7 @@ struct command commands[NCOMMANDS] = {
 	{ '!', tce_exclaim,	{ ADDR_NONE,		ADDR_NONE } },
 	{ '=', tce_equals,	{ ADDR_LAST_LINE,	ADDR_NONE } },
 	{ 'a', tce_a,		{ ADDR_CURRENT_LINE,	ADDR_NONE } },
+	{ 'c', tce_c,		{ ADDR_CURRENT_LINE,	ADDR_CURRENT_LINE } },
 	{ 'd', tce_d,		{ ADDR_CURRENT_LINE,	ADDR_CURRENT_LINE } },
         { 'f', tce_f,           { ADDR_NONE,            ADDR_NONE } },
 	{ 'H', tce_H,		{ ADDR_NONE,		ADDR_NONE } },
