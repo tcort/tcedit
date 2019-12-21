@@ -45,7 +45,7 @@ int tce_dot(struct context *ctx, struct input in) {
 }
 
 int tce_equals(struct context *ctx, struct input in) {
-	fprintf(ctx->out, "%lu\n", in.start);
+	fprintf(ctx->out, "%lu\n", in.line1);
 	return 0;
 }
 
@@ -67,7 +67,7 @@ int tce_a(struct context *ctx, struct input in) {
 		return -1;
 	}
 
-	rc = text_append(ctx->text, t, in.start);
+	rc = text_append(ctx->text, t, in.line1);
 	if (rc == -1) {
 		text_free(t);
 		return -1;
@@ -85,19 +85,19 @@ int tce_c(struct context *ctx, struct input in) {
 	int rc;
 	struct text *t;
 	size_t nlines = text_count(ctx->text);
-	if (in.start < 1 || in.start > in.end || in.end > nlines || in.start > nlines) {
+	if (in.line1 < 1 || in.line1 > in.line2 || in.line2 > nlines || in.line1 > nlines) {
 		tce_errno = TCE_ERR_BAD_ADDR;
 		return -1;
 	}
 
-	ctx->dot = text_delete(ctx->text, in.start, in.end);
+	ctx->dot = text_delete(ctx->text, in.line1, in.line2);
 
 	t = text_read(ctx->in, 1);
 	if (t == NULL) {
 		return -1;
 	}
 
-	rc = text_append(ctx->text, t, in.start - 1);
+	rc = text_append(ctx->text, t, in.line1 - 1);
 	if (rc == -1) {
 		text_free(t);
 		return -1;
@@ -112,12 +112,12 @@ int tce_c(struct context *ctx, struct input in) {
 
 int tce_d(struct context *ctx, struct input in) {
 	size_t nlines = text_count(ctx->text);
-	if (in.start < 1 || in.start > in.end || in.end > nlines || in.start > nlines) {
+	if (in.line1 < 1 || in.line1 > in.line2 || in.line2 > nlines || in.line1 > nlines) {
 		tce_errno = TCE_ERR_BAD_ADDR;
 		return -1;
 	}
 
-	ctx->dot = text_delete(ctx->text, in.start, in.end);
+	ctx->dot = text_delete(ctx->text, in.line1, in.line2);
 	ctx->text_dirty = 1;
 
 	return 0;
@@ -153,7 +153,7 @@ int tce_i(struct context *ctx, struct input in) {
 	int rc;
 	struct text *t;
 	size_t nlines = text_count(ctx->text);
-	if (in.start < 1 || in.start > in.end || in.end > nlines || in.start > nlines) {
+	if (in.line1 < 1 || in.line1 > in.line2 || in.line2 > nlines || in.line1 > nlines) {
 		tce_errno = TCE_ERR_BAD_ADDR;
 		return -1;
 	}
@@ -163,7 +163,7 @@ int tce_i(struct context *ctx, struct input in) {
 		return -1;
 	}
 
-	rc = text_append(ctx->text, t, in.start - 1);
+	rc = text_append(ctx->text, t, in.line1 - 1);
 	if (rc == -1) {
 		text_free(t);
 		return -1;
@@ -179,12 +179,12 @@ int tce_i(struct context *ctx, struct input in) {
 
 int tce_n(struct context *ctx, struct input in) {
 	size_t nlines = text_count(ctx->text);
-	if (in.start < 1 || in.start > in.end || in.end > nlines || in.start > nlines) {
+	if (in.line1 < 1 || in.line1 > in.line2 || in.line2 > nlines || in.line1 > nlines) {
 		tce_errno = TCE_ERR_BAD_ADDR;
 		return -1;
 	}
-	text_write(ctx->text, ctx->out, in.start, in.end, 1);
-	ctx->dot = in.end;
+	text_write(ctx->text, ctx->out, in.line1, in.line2, 1);
+	ctx->dot = in.line2;
 	return 0;
 }
 
@@ -196,12 +196,12 @@ int tce_P(struct context *ctx, struct input in) {
 
 int tce_p(struct context *ctx, struct input in) {
 	size_t nlines = text_count(ctx->text);
-	if (in.start < 1 || in.start > in.end || in.end > nlines || in.start > nlines) {
+	if (in.line1 < 1 || in.line1 > in.line2 || in.line2 > nlines || in.line1 > nlines) {
 		tce_errno = TCE_ERR_BAD_ADDR;
 		return -1;
 	}
-	text_write(ctx->text, ctx->out, in.start, in.end, 0);
-	ctx->dot = in.end;
+	text_write(ctx->text, ctx->out, in.line1, in.line2, 0);
+	ctx->dot = in.line2;
 	return 0;
 }
 
@@ -247,7 +247,7 @@ int tce_r(struct context *ctx, struct input in) {
 		return -1;
 	}
 
-	rc = text_append(ctx->text, t, in.start);
+	rc = text_append(ctx->text, t, in.line1);
 	if (rc == -1) {
 		text_free(t);
 		fclose(input);
@@ -281,10 +281,10 @@ int tce_w(struct context *ctx, struct input in) {
 		return -1;
 	}
 
-	text_write(ctx->text, out, in.start, in.end, 0);
+	text_write(ctx->text, out, in.line1, in.line2, 0);
 	fclose(out);
 
-	ctx->dot = in.end;
+	ctx->dot = in.line2;
 	ctx->text_dirty = 0;
 
 	return 0;

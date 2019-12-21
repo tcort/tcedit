@@ -24,13 +24,14 @@
 #include "ctx.h"
 
 struct input {
-	size_t start;
-	size_t end;
+	size_t line1;
+	size_t line2;
+	size_t nlines;
 	int comma;
 	char letter;
 	char *params;
 };
 
-struct input parse(struct context *ctx, char *command);
+struct input parse(struct context *ctx, char *line);
 
 #endif

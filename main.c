@@ -81,25 +81,25 @@ int main(int argc, char *argv[]) {
 		rc = -1;
 		for (i = 0; i < NCOMMANDS; i++) {
 			if (commands[i].letter == in.letter) {
-				if (in.start == 0) {
+				if (in.line1 == 0) {
 					switch (commands[i].default_addrs[0]) {
-						case ADDR_FIRST_LINE: 	in.start = 1; break;
-						case ADDR_CURRENT_LINE:	in.start = ctx.dot; break;
-						case ADDR_LAST_LINE:	in.start = text_count(ctx.text); break;
-						case ADDR_NEXT_LINE:	in.start = ctx.dot + 1; break;
-						case ADDR_NONE:		in.start = 0; break;
-						default:		in.start = 0; break;
+						case ADDR_FIRST_LINE: 	in.line1 = 1; break;
+						case ADDR_CURRENT_LINE:	in.line1 = ctx.dot; break;
+						case ADDR_LAST_LINE:	in.line1 = text_count(ctx.text); break;
+						case ADDR_NEXT_LINE:	in.line1 = ctx.dot + 1; break;
+						case ADDR_NONE:		in.line1 = 0; break;
+						default:		in.line1 = 0; break;
 					}
 				}
 
-				if (in.end == 0) {
+				if (in.line2 == 0) {
 					switch (commands[i].default_addrs[1]) {
-						case ADDR_FIRST_LINE: 	in.end = 1; break;
-						case ADDR_CURRENT_LINE:	in.end = ctx.dot; break;
-						case ADDR_LAST_LINE:	in.end = text_count(ctx.text); break;
-						case ADDR_NEXT_LINE:	in.end = ctx.dot + 1; break;
-						case ADDR_NONE:		in.end = 0; break;
-						default:		in.end = 0; break;
+						case ADDR_FIRST_LINE: 	in.line2 = 1; break;
+						case ADDR_CURRENT_LINE:	in.line2 = ctx.dot; break;
+						case ADDR_LAST_LINE:	in.line2 = text_count(ctx.text); break;
+						case ADDR_NEXT_LINE:	in.line2 = ctx.dot + 1; break;
+						case ADDR_NONE:		in.line2 = 0; break;
+						default:		in.line2 = 0; break;
 					}
 
 				}

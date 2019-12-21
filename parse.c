@@ -25,15 +25,17 @@
 #include "parse.h"
 #include "text.h"
 
-struct input parse(struct context *ctx, char *command) {
+
+
+struct input parse(struct context *ctx, char *line) {
 	struct input in;
 	char *p;
 
 	memset(&in, '\0', sizeof(struct input));
 
-	p = command;
+	p = line;
 
-	in.start = (unsigned long) atoi(p);
+	in.line1 = (unsigned long) atoi(p);
 	while (p != NULL && isdigit(*p)) {
 		++p;
 	}
@@ -43,7 +45,7 @@ struct input parse(struct context *ctx, char *command) {
 		++p;
 	}
 
-	in.end = (unsigned long) atoi(p);
+	in.line2 = (unsigned long) atoi(p);
 	while (p != NULL && isdigit(*p)) {
 		++p;
 	}
@@ -61,11 +63,11 @@ struct input parse(struct context *ctx, char *command) {
 	}
 
 
-	if (in.end == 0 && in.start == 0 && in.comma == 1) {
-		in.start = 1;
-		in.end = text_count(ctx->text);
-	} else if (in.end == 0 && in.start != 0) {
-		in.end = in.start;
+	if (in.line2 == 0 && in.line1 == 0 && in.comma == 1) {
+		in.line1 = 1;
+		in.line2 = text_count(ctx->text);
+	} else if (in.line2 == 0 && in.line1 != 0) {
+		in.line2 = in.line1;
 	}
 
 	return in;
