@@ -22,7 +22,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "re.h"
+#include "tcre.h"
+
+struct tcre {
+	char c[256];
+};
+typedef struct tcre tcre_t;
 
 static int amatch(char *subject, char *pattern);
 static int smatch(char *subject, char ch, char *pattern);
@@ -75,29 +80,65 @@ static int amatch(char *subject, char *pattern) {
 	}
 }
 
-int match(char *subject, char *pattern) {
-	int rc;
+static tcre_t *compile(char *pattern) {
+	tcre_t *tcre;
+	size_t len;
 	size_t i;
 
-	if (subject == NULL || pattern == NULL) {
+	if (pattern == NULL) {
+		return NULL;
+	}
+
+	len = strlen(pattern) + 1;
+	tcre = (tcre_t *) reallocarray(NULL, sizeof(tcre_t), len);
+	if (tcre == NULL) {
+		return NULL;
+	}
+	memset(tcre, '\0', sizeof(tcre_t) * len);
+
+	for (i = 0; i < len; i++) {
+		tcre[i].c[0] = pattern[i];
+	}
+
+	return tcre;
+}
+
+int match(char *subject, char *pattern) {
+	int rc, result;
+	size_t i;
+	tcre_t *tcre;
+
+	tcre = compile(pattern);
+	if (tcre == NULL) {
 		return 0;
+	}
+
+
+	if (subject == NULL || pattern == NULL) {
+		result = 0;
 	} else if (strlen(subject) == 0 && strlen(pattern) == 0) {
-		return 1;
+		result = 1;
 	} else if (strlen(pattern) == 1 && (pattern[0] == '^' || pattern[0] == '$')) {
-		return 1;
+		result = 1;
 	} else if (pattern[0] == '^') {
 		rc = amatch(subject, &pattern[1]);
 		if (rc == 1) {
-			return 1;
+			result = 1;
+		} else {
+			result = 0;
 		}
 	} else {
+		result = 0;
 		for (i = 0; i < strlen(subject); i++) {
 			rc = amatch(&subject[i], pattern);
 			if (rc == 1) {
-				return 1;
+				result = 1;
+				break;
 			}
 		}
 	}
 
-	return 0;
+	free(tcre);
+
+	return result;
 }

@@ -23,7 +23,7 @@
 #include <string.h>
 
 #include "check.h"
-#include "re.h"
+#include "tcre.h"
 
 int main(int argc, char *argv[]) {
 
