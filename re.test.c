@@ -34,6 +34,9 @@ int main(int argc, char *argv[]) {
 	check(match("Hello", "Hel+o") == 1, "should match");
 	check(match("Hello", "^") == 1, "should match");
 	check(match("Hello", "$") == 1, "should match");
+	check(match("Hello", "Hell?o") == 1, "should match");
+	check(match("Hello", "Hell?o") == 1, "should match");
+	check(match("Helo", "Hell?o") == 1, "should match");
 	check(match("", "^$") == 1, "should match");
 	check(match("", "") == 1, "should match");
 	check(match("Hello", "Hello") == 1, "should match");
