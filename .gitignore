@@ -22,7 +22,7 @@ tcedit*.tar.gz
 tcedit.tgz
 test-driver
 test-suite.log
-test*
+*.test
 *.out
 *.log
 *.trs
