@@ -26,6 +26,7 @@ tcedit_SOURCES = \
 	io.c io.h \
 	main.c \
 	parse.c parse.h \
+	re.c re.h \
 	shell.c shell.h \
 	text.c text.h \
 	sig.c sig.h \
@@ -33,10 +34,8 @@ tcedit_SOURCES = \
 
 man_MANS = tcedit.1
 
-#check_PROGRAMS = testxxx
-#
-#testxxx_SOURCES = tctest.h xxx.h xxx.c xxx.test.c
-#testxxx_LDADD = -ldl -lelf
-#testxxx_LDFLAGS = -rdynamic
-#
-#TESTS = $(check_PROGRAMS)
+check_PROGRAMS = re.test
+
+re_test_SOURCES = check.h re.c re.h re.test.c
+
+TESTS = $(check_PROGRAMS)

@@ -16,31 +16,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "config.h"
+/*
+ * This file provides a set of macros to simplify unit testing. It handles
+ * printing error messages when something you expect to be true is not,
+ * and it will return the right error code.
+ */
 
-#include <signal.h>
+#ifndef __CHECK_H
+#define __CHECK_H
+
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "sig.h"
+#define check(cond, msg) 							\
+	do {									\
+		if (!(cond)) {							\
+			fprintf(stderr, "%s:%d: %s\n", __FILE__, __LINE__, msg);\
+			exit(EXIT_FAILURE);					\
+		}								\
+	} while (0)
 
-int sighup_fired = 0;
-int sigint_fired = 0;
-
-void dohup(int signo) {
-	if (signo == SIGHUP) {
-		sighup_fired = 1;
-	}
-}
-
-void doint(int signo) {
-	if (signo == SIGINT) {
-		sigint_fired = 1;
-	}
-}
-
-void siginit(void) {
-	signal(SIGHUP, dohup);
-	signal(SIGINT, doint);
-	signal(SIGQUIT, SIG_IGN);
-}
+#endif

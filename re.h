@@ -16,31 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "config.h"
+#ifndef __TCE_RE_H
+#define __TCE_RE_H
 
-#include <signal.h>
-#include <stdio.h>
-#include <stdlib.h>
+int match(char *subject, char *pattern);
 
-#include "sig.h"
-
-int sighup_fired = 0;
-int sigint_fired = 0;
-
-void dohup(int signo) {
-	if (signo == SIGHUP) {
-		sighup_fired = 1;
-	}
-}
-
-void doint(int signo) {
-	if (signo == SIGINT) {
-		sigint_fired = 1;
-	}
-}
-
-void siginit(void) {
-	signal(SIGHUP, dohup);
-	signal(SIGINT, doint);
-	signal(SIGQUIT, SIG_IGN);
-}
+#endif

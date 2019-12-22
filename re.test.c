@@ -18,29 +18,31 @@
 
 #include "config.h"
 
-#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-#include "sig.h"
+#include "check.h"
+#include "re.h"
 
-int sighup_fired = 0;
-int sigint_fired = 0;
+int main(int argc, char *argv[]) {
 
-void dohup(int signo) {
-	if (signo == SIGHUP) {
-		sighup_fired = 1;
-	}
-}
+	(void) argc;
+	(void) argv;
 
-void doint(int signo) {
-	if (signo == SIGINT) {
-		sigint_fired = 1;
-	}
-}
+	check(match("Hello", "^H.l*o$") == 1, "should match");
+	check(match("Hello", "Hel+o") == 1, "should match");
+	check(match("Hello", "^") == 1, "should match");
+	check(match("Hello", "$") == 1, "should match");
+	check(match("", "^$") == 1, "should match");
+	check(match("", "") == 1, "should match");
+	check(match("Hello", "Hello") == 1, "should match");
 
-void siginit(void) {
-	signal(SIGHUP, dohup);
-	signal(SIGINT, doint);
-	signal(SIGQUIT, SIG_IGN);
+	check(match("Heo", "Hel+o") == 0, "should not match");
+	check(match("abc", NULL) == 0, "should not match");
+	check(match(NULL, "abc") == 0, "should not match");
+	check(match(NULL, NULL) == 0, "should not match");
+	check(match("Hola", "^H.l*o$") == 0, "should not match");
+
+	exit(EXIT_SUCCESS);
 }
