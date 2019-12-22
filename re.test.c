@@ -30,23 +30,23 @@ int main(int argc, char *argv[]) {
 	(void) argc;
 	(void) argv;
 
-	check(match("Hello", "^H.l*o$") == 1, "should match");
-	check(match("Hello", "Hel+o") == 1, "should match");
-	check(match("Hello", "^") == 1, "should match");
-	check(match("Hello", "$") == 1, "should match");
-	check(match("Hello", "Hell?o") == 1, "should match");
-	check(match("Hello", "Hell?o") == 1, "should match");
-	check(match("Helo", "Hell?o") == 1, "should match");
-	check(match("", "^$") == 1, "should match");
-	check(match("", "") == 1, "should match");
-	check(match("Hello", "Hello") == 1, "should match");
-	check(match("\\^\\.\\*\\$", "^.*$") == 1, "should match");
+	check(match("Hello", "^H.l*o$" ) == 1, "should match");
+	check(match("Hello", "Hel+o"   ) == 1, "should match");
+	check(match("Hello", "^"       ) == 1, "should match");
+	check(match("Hello", "$"       ) == 1, "should match");
+	check(match("Hello", "Hell?o"  ) == 1, "should match");
+	check(match("Hello", "Hell?o"  ) == 1, "should match");
+	check(match("Helo",  "Hell?o"  ) == 1, "should match");
+	check(match("",      "^$"      ) == 1, "should match");
+	check(match("",      ""        ) == 1, "should match");
+	check(match("Hello", "Hello"   ) == 1, "should match");
+	check(match("\\^\\.\\*\\$", "^.*$" ) == 1, "should match");
 
-	check(match("Heo", "Hel+o") == 0, "should not match");
-	check(match("abc", NULL) == 0, "should not match");
-	check(match(NULL, "abc") == 0, "should not match");
-	check(match(NULL, NULL) == 0, "should not match");
-	check(match("Hola", "^H.l*o$") == 0, "should not match");
+	check(match("Heo",  "Hel+o"   ) == 0, "should not match");
+	check(match("abc",  NULL      ) == 0, "should not match");
+	check(match(NULL,   "abc"     ) == 0, "should not match");
+	check(match(NULL,   NULL      ) == 0, "should not match");
+	check(match("Hola", "^H.l*o$" ) == 0, "should not match");
 
 	exit(EXIT_SUCCESS);
 }
