@@ -40,6 +40,7 @@ int main(int argc, char *argv[]) {
 	check(match("", "^$") == 1, "should match");
 	check(match("", "") == 1, "should match");
 	check(match("Hello", "Hello") == 1, "should match");
+	check(match("\\^\\.\\*\\$", "^.*$") == 1, "should match");
 
 	check(match("Heo", "Hel+o") == 0, "should not match");
 	check(match("abc", NULL) == 0, "should not match");

@@ -47,6 +47,12 @@ static int amatch(char *subject, char *pattern) {
 
 	if (strlen(pattern) == 0) {
 		return 1; /* end of regex without bailing? success! */
+	} else if (pattern[0] == '\\') {
+		if (subject[0] == pattern[1]) {
+			return amatch(&subject[1], &pattern[2]);
+		} else {
+			return 0;
+		}
 	} else if (pattern[1] == '?') {
 		if (subject[0] == pattern[0]) {
 			return amatch(&subject[1], &pattern[2]);

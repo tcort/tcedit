@@ -44,13 +44,14 @@ Lines may be addressed as follows:
 
 ## Regular Expression
 
-| Pattern | Description                                      |
-| ------- | ------------------------------------------------ |
-| `c`     | Matches any non-special character.               |
-| `.`     | Matches any character.                           |
-| `^`     | Anchor matching at start of subject.             |
-| `$`     | Anchor matching at end of subject.               |
-| `?`     | Matches the preceding character 0 or 1 times.    |
-| `*`     | Matches the preceding character 0 or more times. |
-| `+`     | Matches the preceding character 1 or more times. |
+| Pattern | Description                                        |
+| ------- | -------------------------------------------------- |
+| `c`     | Matches any non-special character `c`.             |
+| `\c`    | Matches any character `c` (e.g. `\*` to match `*`. |
+| `.`     | Matches any character.                             |
+| `^`     | Anchor matching at start of subject.               |
+| `$`     | Anchor matching at end of subject.                 |
+| `?`     | Matches the preceding character 0 or 1 times.      |
+| `*`     | Matches the preceding character 0 or more times.   |
+| `+`     | Matches the preceding character 1 or more times.   |
 
