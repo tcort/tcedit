@@ -20,6 +20,7 @@ AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 
 AC_LANG([C])
 AC_PROG_CC
+AC_GNU_SOURCE
 AC_HEADER_STDC
 
 AC_CHECK_HEADERS([malloc.h])
