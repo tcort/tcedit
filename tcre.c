@@ -89,7 +89,8 @@ static int amatch(char *subject, tcre_t *tcre) {
 static tcre_t *compile(char *pattern) {
 	tcre_t *tcre;
 	size_t len;
-	size_t i;
+	size_t i, j, k;
+	int invert;
 
 	if (pattern == NULL) {
 		return NULL;
@@ -102,8 +103,26 @@ static tcre_t *compile(char *pattern) {
 	}
 	memset(tcre, '\0', sizeof(tcre_t) * len);
 
-	for (i = 0; i < len; i++) {
-		tcre[i].c[(unsigned char)pattern[i]] = 1;
+	for (invert = j = i = 0; i < len; i++, j++) {
+		switch (pattern[i]) {
+			case '[':
+				if (pattern[++i] == '^') {
+					invert = 1;
+				}
+				while (pattern[i] != ']') {
+					tcre[j].c[(unsigned char)pattern[i]] = 1;
+					i++;
+				}
+				if (invert) {
+					for (k = 0; k < UCHAR_MAX; k++) {
+						tcre[j].c[k] = !tcre[j].c[k];
+					}
+				}
+				break;
+			default:
+				tcre[j].c[(unsigned char)pattern[i]] = 1;
+				break;
+		}
 	}
 
 	return tcre;
