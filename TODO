@@ -3,9 +3,13 @@ memory management
  - cut down on exit() calls
 
 impl
- - `=` command should set dot
  - `r`/`w` output byte counts
  - `r`/`w` to/from a program (r !ls)
+ - rewrite command parser to support regexp
+ - regexp should return where matches were found.
+ - `s` command
+ - `g` command
+ - better signal handling
 
 testing
  - unit tests for everything?

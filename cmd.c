@@ -46,6 +46,7 @@ int tce_dot(struct context *ctx, struct input in) {
 
 int tce_equals(struct context *ctx, struct input in) {
 	fprintf(ctx->out, "%lu\n", in.line1);
+	/* ctx->dot unchanged */
 	return 0;
 }
 
@@ -55,6 +56,7 @@ int tce_exclaim(struct context *ctx, struct input in) {
 	}
 	doshell(in.params);
 	fprintf(ctx->out, "!\n");
+	/* ctx->dot unchanged */
 	return 0;
 }
 
@@ -74,7 +76,7 @@ int tce_a(struct context *ctx, struct input in) {
 	}
 
 	ctx->text_dirty = 1;
-	ctx->dot = text_count(ctx->text);
+	ctx->dot = text_count(ctx->text); /* TODO not end of file, end of input */
 
 	text_free(t);
 
@@ -104,7 +106,7 @@ int tce_c(struct context *ctx, struct input in) {
 	}
 
 	ctx->text_dirty = 1;
-	ctx->dot = text_count(ctx->text);
+	ctx->dot = text_count(ctx->text); /* TODO last line of input */
 
 	text_free(t);
 	return 0;
@@ -117,7 +119,7 @@ int tce_d(struct context *ctx, struct input in) {
 		return -1;
 	}
 
-	ctx->dot = text_delete(ctx->text, in.line1, in.line2);
+	ctx->dot = text_delete(ctx->text, in.line1, in.line2); /* TODO first line not deleted */
 	ctx->text_dirty = 1;
 
 	return 0;
@@ -170,7 +172,7 @@ int tce_i(struct context *ctx, struct input in) {
 	}
 
 	ctx->text_dirty = 1;
-	ctx->dot = text_count(ctx->text);
+	ctx->dot = text_count(ctx->text); /* TODO last line of input */
 
 	text_free(t);
 
@@ -184,7 +186,7 @@ int tce_n(struct context *ctx, struct input in) {
 		return -1;
 	}
 	text_write(ctx->text, ctx->out, in.line1, in.line2, 1);
-	ctx->dot = in.line2;
+	ctx->dot = in.line2; /* last line printed */
 	return 0;
 }
 
@@ -201,7 +203,7 @@ int tce_p(struct context *ctx, struct input in) {
 		return -1;
 	}
 	text_write(ctx->text, ctx->out, in.line1, in.line2, 0);
-	ctx->dot = in.line2;
+	ctx->dot = in.line2; /* last line printed */
 	return 0;
 }
 
@@ -255,7 +257,7 @@ int tce_r(struct context *ctx, struct input in) {
 	}
 
 	ctx->text_dirty = 1;
-	ctx->dot = text_count(ctx->text);
+	ctx->dot = text_count(ctx->text); /* TODO last line of file in */
 
 	text_free(t);
 	fclose(input);
@@ -284,8 +286,8 @@ int tce_w(struct context *ctx, struct input in) {
 	text_write(ctx->text, out, in.line1, in.line2, 0);
 	fclose(out);
 
-	ctx->dot = in.line2;
 	ctx->text_dirty = 0;
+	/* ctx->dot unchanged */
 
 	return 0;
 }

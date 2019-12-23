@@ -125,7 +125,6 @@ int main(int argc, char *argv[]) {
 		}
 	} while (!ctx.done);
 
-
 	ctx_free(&ctx);
 
 	return 0;
