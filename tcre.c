@@ -31,9 +31,14 @@ struct tcre {
 typedef struct tcre tcre_t;
 
 static int amatch(char *subject, tcre_t *tcre);
-static int smatch(char *subject, char ch, tcre_t *tcre);
+static int cmatch(char c, tcre_t *tcre);
+static int smatch(char *subject, tcre_t *ch, tcre_t *tcre);
 
-static int smatch(char *subject, char ch, tcre_t *tcre) {
+static int cmatch(char c, tcre_t *tcre) {
+	return tcre[0].c[(unsigned char)c];
+}
+
+static int smatch(char *subject, tcre_t *ch, tcre_t *tcre) {
 	size_t i;
 	for (i = 0; i < strlen(subject); i++) {
 		int rc;
@@ -42,7 +47,7 @@ static int smatch(char *subject, char ch, tcre_t *tcre) {
 			return 1;
 		}
 
-		if (subject[i] != ch && '.' != ch) {
+		if (cmatch(subject[i], ch) && cmatch('.', ch)) {
 			break;
 		}
 	}
@@ -51,30 +56,30 @@ static int smatch(char *subject, char ch, tcre_t *tcre) {
 
 static int amatch(char *subject, tcre_t *tcre) {
 
-	if (tcre[0].c[0] == '\0') {
+	if (cmatch('\0', &tcre[0])) {
 		return 1; /* end of regex without bailing? success! */
-	} else if (tcre[0].c[0] == '\\') {
-		if (subject[0] == tcre[1].c[0]) {
+	} else if (cmatch('\\', &tcre[0])) {
+		if (cmatch(subject[0], &tcre[1])) {
 			return amatch(&subject[1], &tcre[2]);
 		} else {
 			return 0;
 		}
-	} else if (tcre[1].c[0] == '?') {
-		if (subject[0] == tcre[0].c[0]) {
+	} else if (cmatch('?', &tcre[1])) {
+		if (cmatch(subject[0], &tcre[0])) {
 			return amatch(&subject[1], &tcre[2]);
 		} else {
 			return amatch(&subject[0], &tcre[2]);
 		}
-	} else if (tcre[1].c[0] == '+') {
-		if (subject[0] != tcre[0].c[0]) {
+	} else if (cmatch('+', &tcre[1])) {
+		if (!cmatch(subject[0], &tcre[0])) {
 			return 0;
 		}
-		return smatch(subject, tcre[0].c[0],  &tcre[2]);
-	} else if (tcre[1].c[0] == '*') {
-		return smatch(subject, tcre[0].c[0],  &tcre[2]);
-	} else if (tcre[1].c[0] == '\0' && tcre[0].c[0] == '$') {
+		return smatch(subject, &tcre[0],  &tcre[2]);
+	} else if (cmatch('*', &tcre[1])) {
+		return smatch(subject, &tcre[0],  &tcre[2]);
+	} else if (cmatch('\0', &tcre[1]) && cmatch('$', &tcre[0])) {
 		return strlen(subject) == 0;
-	} else if (strlen(subject) != 0 && (tcre[0].c[0] == '.' || subject[0] == tcre[0].c[0])) {
+	} else if (strlen(subject) != 0 && (cmatch('.', &tcre[0]) || cmatch(subject[0], &tcre[0]))) {
 		return amatch(&subject[1], &tcre[1]);
 	} else {
 		return 0;
@@ -98,7 +103,7 @@ static tcre_t *compile(char *pattern) {
 	memset(tcre, '\0', sizeof(tcre_t) * len);
 
 	for (i = 0; i < len; i++) {
-		tcre[i].c[0] = pattern[i];
+		tcre[i].c[(unsigned char)pattern[i]] = 1;
 	}
 
 	return tcre;
@@ -113,11 +118,11 @@ int match(char *subject, char *pattern) {
 
 	if (subject == NULL || tcre == NULL) {
 		result = 0;
-	} else if (strlen(subject) == 0 && tcre[0].c[0] == '\0') {
+	} else if (strlen(subject) == 0 && cmatch('\0', &tcre[0])) {
 		result = 1;
-	} else if (tcre[1].c[0] == '\0' && (tcre[0].c[0] == '^' || tcre[0].c[0] == '$')) {
+	} else if (cmatch('\0', &tcre[1]) && (cmatch('^', &tcre[0]) || cmatch('$', &tcre[0]))) {
 		result = 1;
-	} else if (tcre[0].c[0] == '^') {
+	} else if (cmatch('^', &tcre[0])) {
 		rc = amatch(subject, &tcre[1]);
 		if (rc == 1) {
 			result = 1;
