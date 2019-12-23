@@ -110,8 +110,20 @@ static tcre_t *compile(char *pattern) {
 					invert = 1;
 				}
 				while (pattern[i] != ']') {
-					tcre[j].c[(unsigned char)pattern[i]] = 1;
-					i++;
+					if (pattern[i+1] == '-' && pattern[i+2] != ']') {
+						size_t x, y;
+						x = pattern[i];
+						y = pattern[i+2];
+
+						for (x = pattern[i], y = pattern[i+2]; x <= y; x++) {
+							tcre[j].c[(unsigned char)x] = 1;
+						}
+
+						i+=2;
+					} else {
+						tcre[j].c[(unsigned char)pattern[i]] = 1;
+						i++;
+					}
 				}
 				if (invert) {
 					for (k = 0; k < UCHAR_MAX; k++) {

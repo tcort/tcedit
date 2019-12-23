@@ -48,7 +48,14 @@ int main(int argc, char *argv[]) {
 	check(match("Hello", "Hello"   ) == 1, "should match");
 	check(match("\\^\\.\\*\\$", "^.*$" ) == 1, "should match");
 	check(match("This is text", "This is text") == 1, "should match");
+	check(match("a4", "[a-z0-9]+") == 1, "should match");
+	check(match("z", "[a-z0-9]") == 1, "should match");
+	check(match("a", "[^b-z0-9]") == 1, "should match");
+	check(match("9", "[^b-z0-8]") == 1, "should match");
+	check(match("-", "[-]") == 1, "should match");
 
+	check(match("a", "[b-z0-9]") == 0, "should not match");
+	check(match("9", "[b-z0-8]") == 0, "should not match");
 	check(match("yello", "[Hh]ello" ) == 0, "should not match");
 	check(match("Heo",  "Hel+o"   ) == 0, "should not match");
 	check(match("abc",  NULL      ) == 0, "should not match");
