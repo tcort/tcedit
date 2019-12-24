@@ -22,25 +22,34 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "ctx.h"
 #include "sig.h"
 
-int sighup_fired = 0;
-int sigint_fired = 0;
+static struct context *ctx = NULL;
 
-void dohup(int signo) {
-	if (signo == SIGHUP) {
-		sighup_fired = 1;
+static void signal_handler(int signo) {
+	switch (signo) {
+		case SIGHUP: fprintf(ctx->out, "\n?\n"); break;
+		case SIGINT: fprintf(ctx->out, "\n?\n"); break;
 	}
 }
 
-void doint(int signo) {
-	if (signo == SIGINT) {
-		sigint_fired = 1;
-	}
-}
 
-void siginit(void) {
-	signal(SIGHUP, dohup);
-	signal(SIGINT, doint);
-	signal(SIGQUIT, SIG_IGN);
+void siginit(struct context *_ctx) {
+
+	struct sigaction action, inaction;
+
+	/* handle HUP and INT */
+	action.sa_handler = signal_handler;
+	sigemptyset(&action.sa_mask);
+	action.sa_flags = SA_RESTART;
+	sigaction(SIGHUP, &action, NULL);
+	sigaction(SIGINT, &action, NULL);
+
+	/* ignore QUIT */
+	inaction.sa_handler = SIG_IGN;
+	sigemptyset(&inaction.sa_mask);
+	sigaction(SIGQUIT, &inaction, NULL);
+
+	ctx = _ctx;
 }

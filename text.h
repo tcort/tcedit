@@ -29,6 +29,8 @@ struct text {
 	size_t capacity;
 	size_t length;
 
+	size_t bytes; /* only valid after read/write call and only reflects bytes read/written */
+
 	char *line;
 	size_t cap;
 	ssize_t len;

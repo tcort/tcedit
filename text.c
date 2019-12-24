@@ -84,11 +84,7 @@ size_t text_delete(struct text *t, size_t begin, size_t end) {
 
 void text_extend(struct text *t) {
 	t->capacity += t->incr;
-#ifdef HAVE_REALLOCARRAY
 	t->lines = (long *) reallocarray(t->lines, t->capacity, sizeof(long));
-#else /* fall back to realloc */
-	t->lines = (long *) realloc(t->lines, t->capacity * sizeof(long));
-#endif
 }
 
 int text_appendln(struct text *t, char *s, size_t where) {
@@ -105,7 +101,7 @@ int text_appendln(struct text *t, char *s, size_t where) {
 	}
 
 	t->length++;
-	for (i = t->length; i >= where; i--) {
+	for (i = t->length; i > where; i--) {
 		t->lines[i] = t->lines[i-1];
 	}
 
@@ -119,9 +115,9 @@ int text_append(struct text *t, struct text *tin, size_t where) {
 
 	size_t i;
 
-	for (i = 1; i <= text_count(tin); i++) {
+	for (i = 1; i <= tin->length; i++) {
 		int rc;
-		rc = text_appendln(t, text_getln(tin, i), where+i);
+		rc = text_appendln(t, text_getln(tin, i), where+i-1);
 		if (rc == -1) {
 			return -1;
 		}
@@ -140,6 +136,7 @@ struct text *text_read(FILE *in, int period_ends_input) {
 		return NULL;
 	}
 
+	t->bytes = 0;
 	for (i = 1; (t->len = getline(&t->line, &t->cap, in)) > 0; i++) {
 		int rc;
 
@@ -152,6 +149,8 @@ struct text *text_read(FILE *in, int period_ends_input) {
 			text_free(t);
 			return NULL;
 		}
+
+		t->bytes += strlen(t->line);
 	}
 
 	return t;
@@ -160,7 +159,7 @@ struct text *text_read(FILE *in, int period_ends_input) {
 void text_write(struct text *t, FILE *out, size_t begin, size_t end, int show_lineno) {
 
 	size_t i;
-
+	t->bytes = 0;
 	for (i = begin; i <= t->length && i <= end; i++) {
 		char *s;
 		s = text_getln(t, i);
@@ -168,6 +167,7 @@ void text_write(struct text *t, FILE *out, size_t begin, size_t end, int show_li
 			fprintf(out, "%ld\t", i);
 		}
 		fwrite(s, strlen(s), 1, out);
+		t->bytes += strlen(s);
 	}
 
 	fflush(out);

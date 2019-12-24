@@ -35,6 +35,8 @@ struct context {
 	int done;
 	struct text *text;
 	char filename[FILENAME_MAX+1];
+	int restricted;
+	int suppress;
 };
 
 void ctx_free(struct context *ctx);

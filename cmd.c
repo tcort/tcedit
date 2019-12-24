@@ -54,8 +54,14 @@ int tce_exclaim(struct context *ctx, struct input in) {
 	if (in.params == NULL) {
 		return -1;
 	}
+	if (ctx->restricted) {
+		tce_errno = TCE_ERR_NON_RMODE_CMD;
+		return -1;
+	}
 	doshell(in.params);
-	fprintf(ctx->out, "!\n");
+	if (ctx->suppress == 0) {
+		fprintf(ctx->out, "!\n");
+	}
 	/* ctx->dot unchanged */
 	return 0;
 }
@@ -238,7 +244,15 @@ int tce_r(struct context *ctx, struct input in) {
 		return -1;
 	}
 
-	input = fopen(filename, "r");
+	if (filename[0] == '!') {
+		if (ctx->restricted == 1) {
+			tce_errno = TCE_ERR_RMODE_PROC_IO;
+			return -1;
+		}
+		input = popen(&filename[1], "r");
+	} else {
+		input = fopen(filename, "r");
+	}
 	if (input == NULL) {
 		tce_errno = TCE_ERR_READ_FAILED;
 		return -1;
@@ -247,6 +261,10 @@ int tce_r(struct context *ctx, struct input in) {
 	t = text_read(input, 0);
 	if (t == NULL) {
 		return -1;
+	}
+
+	if (ctx->suppress == 0) {
+		fprintf(ctx->out, "%lu\n", t->bytes);
 	}
 
 	rc = text_append(ctx->text, t, in.line1);
@@ -260,7 +278,11 @@ int tce_r(struct context *ctx, struct input in) {
 	ctx->dot = text_count(ctx->text); /* TODO last line of file in */
 
 	text_free(t);
-	fclose(input);
+	if (filename[0] == '!') {
+		pclose(input);
+	} else {
+		fclose(input);
+	}
 
 	return 0;
 }
@@ -277,14 +299,30 @@ int tce_w(struct context *ctx, struct input in) {
 		return -1;
 	}
 
-	out = fopen(filename, "w");
+	if (filename[0] == '!') {
+		if (ctx->restricted == 1) {
+			tce_errno = TCE_ERR_RMODE_PROC_IO;
+			return -1;
+		}
+		out = popen(&filename[1], "w");
+	} else {
+		out = fopen(filename, "w");
+	}
 	if (out == NULL) {
 		tce_errno = TCE_ERR_WRITE_FAILED;
 		return -1;
 	}
 
 	text_write(ctx->text, out, in.line1, in.line2, 0);
-	fclose(out);
+	if (filename[0] == '!') {
+		pclose(out);
+	} else {
+		fclose(out);
+	}
+
+	if (ctx->suppress == 0) {
+		fprintf(ctx->out, "%lu\n", ctx->text->bytes);
+	}
 
 	ctx->text_dirty = 0;
 	/* ctx->dot unchanged */

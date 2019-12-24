@@ -25,7 +25,9 @@ char *tce_errlist[] = {
 	"bad address",
 	"write failed",
 	"filename not set",
-	"read failed"
+	"read failed",
+	"command not available in restricted mode",
+	"process i/o not available in restricted mode"
 };
 
 int tce_nerror = sizeof(tce_errlist)/sizeof(char*);

@@ -35,13 +35,13 @@ int main(int argc, char *argv[]) {
 	int		i;
 	int		rc;
 	int		optc;
-	const char     *const short_options = "p:v";
+	const char     *const short_options = "p:rsv";
 	struct input	in;
 	struct context	ctx;
 
 	ctx.in = stdin,
 	ctx.out = stdout,
-	ctx.dot = 0,
+	ctx.dot = 1,
 	ctx.help_on = 0,
 	ctx.prompt_on = 0,
 	ctx.prompt = "*",
@@ -49,14 +49,26 @@ int main(int argc, char *argv[]) {
 	ctx.done = 0,
 	ctx.text = text_new();
 	ctx.filename[0] = '\0'; /* default to not set */
+	ctx.restricted = 0;
+	ctx.suppress = 0;
 
-	siginit();
+	if (argc > 0 && argv[0] != NULL && argv[0][0] == 'r') {
+		ctx.restricted = 1;
+	}
+
+	siginit(&ctx);
 
 	while ((optc = getopt(argc, argv, short_options)) != -1) {
 		switch (optc) {
 			case 'p':
 				ctx.prompt = optarg;
 				ctx.prompt_on = 1;
+				break;
+			case 'r':
+				ctx.restricted = 1;
+				break;
+			case 's':
+				ctx.suppress = 1;
 				break;
 			case 'v':
 				fprintf(ctx.out, "%s\n", PACKAGE_STRING);

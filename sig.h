@@ -19,9 +19,8 @@
 #ifndef __TCE_SIG_H
 #define __TCE_SIG_H
 
-void siginit(void);
+#include "ctx.h"
 
-extern int sighup_fired;
-extern int sigint_fired;
+void siginit(struct context *ctx);
 
 #endif

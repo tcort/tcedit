@@ -27,41 +27,66 @@
 
 int main(int argc, char *argv[]) {
 
-	(void) argc;
-	(void) argv;
+	size_t i;
+	int debug;
+	char *pass[][2] = {
+		{ "13.37", "[123456789]+[0123456789]*\\.[0123456789][0123456789]" },
+		{ "a03.37a", "[123456789]+[0123456789]*\\.[0123456789][0123456789]" },
+		{ "Hello", "[Hh]ello" },
+		{ "abababc", "a[ab]+c" },
+		{ "Hello", "[^h]ello" },
+		{ "hello", "[Hh]ello" },
+		{ "Hello", "^H.l*o$" },
+		{ "Hello", "Hel+o"   },
+		{ "Hello", "^"       },
+		{ "Hello", "$"       },
+		{ "Hello", "Hell?o"  },
+		{ "Hello", "Hell?o"  },
+		{ "Helo",  "Hell?o"  },
+		{ "",      "^$"      },
+		{ "",      ""        },
+		{ "Hello", "Hello"   },
+		{ "\\^\\.\\*\\$", "^.*$" },
+		{ "This is text", "This is text"},
+		{ "a4", "[a-z0-9]+"},
+		{ "z", "[a-z0-9]"},
+		{ "a", "[^b-z0-9]"},
+		{ "9", "[^b-z0-8]"},
+		{ "-", "[-]"}
+	};
+#define NPASS (sizeof(pass)/sizeof(pass[0]))
 
-	check(match("13.37", "[123456789]+[0123456789]*\\.[0123456789][0123456789]" ) == 1, "should match");
-	check(match("a03.37a", "[123456789]+[0123456789]*\\.[0123456789][0123456789]" ) == 1, "should match");
-	check(match("Hello", "[Hh]ello" ) == 1, "should match");
-	check(match("abababc", "a[ab]+c" ) == 1, "should match");
-	check(match("Hello", "[^h]ello" ) == 1, "should match");
-	check(match("hello", "[Hh]ello" ) == 1, "should match");
-	check(match("Hello", "^H.l*o$" ) == 1, "should match");
-	check(match("Hello", "Hel+o"   ) == 1, "should match");
-	check(match("Hello", "^"       ) == 1, "should match");
-	check(match("Hello", "$"       ) == 1, "should match");
-	check(match("Hello", "Hell?o"  ) == 1, "should match");
-	check(match("Hello", "Hell?o"  ) == 1, "should match");
-	check(match("Helo",  "Hell?o"  ) == 1, "should match");
-	check(match("",      "^$"      ) == 1, "should match");
-	check(match("",      ""        ) == 1, "should match");
-	check(match("Hello", "Hello"   ) == 1, "should match");
-	check(match("\\^\\.\\*\\$", "^.*$" ) == 1, "should match");
-	check(match("This is text", "This is text") == 1, "should match");
-	check(match("a4", "[a-z0-9]+") == 1, "should match");
-	check(match("z", "[a-z0-9]") == 1, "should match");
-	check(match("a", "[^b-z0-9]") == 1, "should match");
-	check(match("9", "[^b-z0-8]") == 1, "should match");
-	check(match("-", "[-]") == 1, "should match");
+	char *fail[][2] = {
+		{ "a", "[b-z0-9]"},
+		{ "9", "[b-z0-8]"},
+		{ "yello", "[Hh]ello" },
+		{ "Heo",  "Hel+o"   },
+		{ "abc",  NULL      },
+		{ NULL,   "abc"     },
+		{ NULL,   NULL      },
+		{ "Hola", "^H.l*o$" },
+	};
+#define NFAIL (sizeof(fail)/sizeof(fail[0]))
 
-	check(match("a", "[b-z0-9]") == 0, "should not match");
-	check(match("9", "[b-z0-8]") == 0, "should not match");
-	check(match("yello", "[Hh]ello" ) == 0, "should not match");
-	check(match("Heo",  "Hel+o"   ) == 0, "should not match");
-	check(match("abc",  NULL      ) == 0, "should not match");
-	check(match(NULL,   "abc"     ) == 0, "should not match");
-	check(match(NULL,   NULL      ) == 0, "should not match");
-	check(match("Hola", "^H.l*o$" ) == 0, "should not match");
+	if (argc == 2 && strcmp(argv[1], "-d") == 0) {
+		debug = 1;
+	} else {
+		debug = 0;
+	}
+
+	for (i = 0; i < NPASS; i++) {
+		if (debug == 1) {
+			printf("subject='%s' pattern='%s'\n", pass[i][0], pass[i][1]);
+		}
+		check(match(pass[i][0], pass[i][1]) == 1, "should match");
+	}
+
+	for (i = 0; i < NFAIL; i++) {
+		if (debug == 1) {
+			printf("subject='%s' pattern='%s'\n", fail[i][0], fail[i][1]);
+		}
+		check(match(fail[i][0], fail[i][1]) == 0, "should not match");
+	}
 
 	exit(EXIT_SUCCESS);
 }
