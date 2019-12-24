@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
 
 	ctx.in = stdin,
 	ctx.out = stdout,
-	ctx.dot = 1,
+	ctx.dot = 0,
 	ctx.help_on = 0,
 	ctx.prompt_on = 0,
 	ctx.prompt = "*",

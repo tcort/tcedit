@@ -92,10 +92,6 @@ int text_appendln(struct text *t, char *s, size_t where) {
 	size_t i;
 	size_t nitems;
 
-	if (where < 1 || where > t->length) {
-		tce_errno = TCE_ERR_BAD_ADDR;
-	}
-
 	if (t->length + 1 >= t->capacity) {
 		text_extend(t);
 	}
@@ -117,7 +113,7 @@ int text_append(struct text *t, struct text *tin, size_t where) {
 
 	for (i = 1; i <= tin->length; i++) {
 		int rc;
-		rc = text_appendln(t, text_getln(tin, i), where+i-1);
+		rc = text_appendln(t, text_getln(tin, i), where+i);
 		if (rc == -1) {
 			return -1;
 		}
@@ -137,7 +133,7 @@ struct text *text_read(FILE *in, int period_ends_input) {
 	}
 
 	t->bytes = 0;
-	for (i = 1; (t->len = getline(&t->line, &t->cap, in)) > 0; i++) {
+	for (i = 0; (t->len = getline(&t->line, &t->cap, in)) > 0; i++) {
 		int rc;
 
 		if (t->line[0] == '.' && t->line[1] == '\n' && period_ends_input == 1) {
