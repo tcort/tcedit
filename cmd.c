@@ -105,7 +105,7 @@ int tce_c(struct context *ctx, struct input in) {
 		return -1;
 	}
 
-	rc = text_append(ctx->text, t, in.line1 - 1);
+	rc = text_append(ctx->text, t, in.line1);
 	if (rc == -1) {
 		text_free(t);
 		return -1;
