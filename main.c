@@ -19,6 +19,7 @@
 #include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "config.h"
 
@@ -84,12 +85,19 @@ int main(int argc, char *argv[]) {
 	argc -= optind;
 	argv += optind;
 
+	if (argc > 0) {
+		in.letter = 'r'; /* TODO simulate 'e' instead */
+		in.params = strdup(argv[0]);
+		goto exec_cmd;
+	}
+
 	do {
 		char *cmd = readaline(ctx.in, ctx.out, ctx.prompt_on ? ctx.prompt : "");
 		if (cmd == NULL) {
 			break;
 		}
 		in = parse(&ctx, cmd);
+exec_cmd:
 		rc = -1;
 		for (i = 0; i < NCOMMANDS; i++) {
 			if (commands[i].letter == in.letter) {

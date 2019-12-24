@@ -5,7 +5,7 @@ A simple text editor.
 ## Usage
 
 ```
-tcedit [-p string] [-r] [-s] [-v]
+tcedit [-p string] [-r] [-s] [-v] [filename]
 ```
 
 | option      | description                                                                                         |
