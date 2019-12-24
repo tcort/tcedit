@@ -40,8 +40,8 @@ Lines may be addressed as follows:
 | `(.)a`                             | Enter append mode. Input a line with a single `.` to exit append mode.                                                               |
 | `(.,.)c`                           | Change the addressed line(s) in the buffer. Equivalent to N,Md followed by Ni.                                                       |
 | `(.,.)d`                           | Delete the addressed line(s) from the buffer.                                                                                        |
-| `E [filename.txt | !command]`      | Forcefully deletes the buffer and reads the text of a file into the buffer. It sets the default file name. Unsaved changes are lost. |
-| `e [filename.txt | !command]`      | Deletes the buffer and reads the text of a file into the buffer. It sets the default file name.                                      |
+| `E [filename.txt]` or `E  [!command]`      | Forcefully deletes the buffer and reads the text of a file into the buffer. It sets the default file name. Unsaved changes are lost. |
+| `e [filename.txt]` or `e [!command]`      | Deletes the buffer and reads the text of a file into the buffer. It sets the default file name.                                      |
 | `f [filename.txt]`                 | Set the default filename. If no filename is given, print the current default filename.                                               |
 | `H`                                | Toggle helpful error messages on/off. Initially the helpful error messages are turned off.                                           |
 | `h`                                | Print a helpful error message for the last error.                                                                                    |
@@ -51,8 +51,8 @@ Lines may be addressed as follows:
 | `(.,.)p`                           | Print lines from the buffer.                                                                                                         |
 | `Q`                                | Force quit. Always succeeds. Unsaved changes are lost.                                                                               |
 | `q`                                | Quit. Fails if there are unsaved changes. Succeeds if entered a second time with no changes in between. Unsaved changes are lost.    |
-| `($)r [filename.txt | !command]`   | Read the text of a file into the buffer. A filename must be given if one has not been set (either via cmd line args or `f`).         |
-| `(1,$)w [filename.txt | !command]` | Write the text to a file. A filename must be given if one has not been set (either via cmd line args or `f`).                        |
+| `($)r [filename.txt] or `($)r [!command]`   | Read the text of a file into the buffer. A filename must be given if one has not been set (either via cmd line args or `f`).         |
+| `(1,$)w [filename.txt]` or `(1,$)w [!command]` | Write the text to a file. A filename must be given if one has not been set (either via cmd line args or `f`).                        |
 | `<newline>`                        | A blank line prints the current line and advances `.`. This is equivalent to `.+1p`.                                                 |
 | `# comment`                        | A comment line. Comment lines are ignored which is useful for scripting.                                                             |
 
