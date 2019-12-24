@@ -82,7 +82,7 @@ int tce_a(struct context *ctx, struct input in) {
 	}
 
 	ctx->text_dirty = 1;
-	ctx->dot = text_count(ctx->text); /* TODO not end of file, end of input */
+	ctx->dot = in.line1 + text_count(t);
 
 	text_free(t);
 
@@ -112,7 +112,7 @@ int tce_c(struct context *ctx, struct input in) {
 	}
 
 	ctx->text_dirty = 1;
-	ctx->dot = text_count(ctx->text); /* TODO last line of input */
+	ctx->dot = in.line1 + text_count(t);
 
 	text_free(t);
 	return 0;
@@ -178,7 +178,7 @@ int tce_i(struct context *ctx, struct input in) {
 	}
 
 	ctx->text_dirty = 1;
-	ctx->dot = text_count(ctx->text); /* TODO last line of input */
+	ctx->dot = in.line1 + text_count(t);
 
 	text_free(t);
 
