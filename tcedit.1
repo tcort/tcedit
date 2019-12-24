@@ -1,0 +1,66 @@
+.\" tcedit - a line oriented text editor.
+.\" Copyright (C) 2018, 2019  Thomas Cort <linuxgeek@gmail.com>
+.\"
+.\" This program is free software: you can redistribute it and/or modify
+.\" it under the terms of the GNU General Public License as published by
+.\" the Free Software Foundation, either version 3 of the License, or
+.\" (at your option) any later version.
+.\"
+.\" This program is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\" GNU General Public License for more details.
+.\"
+.\" You should have received a copy of the GNU General Public License
+.\" along with this program.  If not, see <http://www.gnu.org/licenses/>.
+.Dd December 25, 2019
+.Dt TCEDIT 1
+.Os UNIX
+.Sh NAME
+.Nm tcedit
+.Nd line-oriented text editor.
+.Sh SYNOPSIS
+.Nm
+.Op Fl p Ar prompt
+.Op Fl rsv
+.Op Ar file
+.Sh DESCRIPTION
+.Nm
+is a simple text editor that adds, removes, and manipulates lines in files.
+.Sh OPTIONS
+The following command line options are available:
+.Bl -tag -width -indent
+.It Fl p Ar prompt
+Accepts a single character to use as the prompt in command mode.
+.It Fl r
+Enabled restricted mode.
+.It Fl s
+Suppress diagnostic output.
+.It Fl v
+Print version information and exit.
+.El
+.Sh FILES
+.Bl -tag -width "/Users/joeuser/Library/really_long_file_name" -compact
+.It Pa /tmp/tcedit.*
+line buffer
+.El
+.Sh DIAGNOSTICS
+Unless the
+.Fl s
+command line option is supplied, diagnostics such as bytes read and written
+are printed to standard out. Error diagnostics can be enabled with the H command.
+.Sh SEE ALSO
+.Xr ed 1 ,
+.Xr ex 1 ,
+.Xr qed 1
+.Sh STANDARDS
+This utility does not conform to any standards. However, it does work much like
+.Xr ed 1 which is a standardized text editor.
+.Sh HISTORY
+.Nm
+development began in November 2018 and the first release was on December 25, 2019.
+.Sh AUTHORS
+.An Thomas Cort <linuxgeek@gmail.com>
+.Sh BUGS
+Multibyte characters are not recognized by
+.Nm .

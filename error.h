@@ -28,6 +28,7 @@
 #define TCE_ERR_READ_FAILED 6
 #define TCE_ERR_NON_RMODE_CMD 7
 #define TCE_ERR_RMODE_PROC_IO 8
+#define TCE_ERR_NO_PARAM 9
 
 extern char *tce_errlist[];
 extern int tce_nerror;

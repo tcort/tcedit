@@ -26,28 +26,35 @@ Lines may be addressed as follows:
 
 * `.` - current line in the buffer
 * `$` - last line in the buffer
+* `,` or `%` - with no address arguments is equivalent to `1,$`
+* `/regex/` - first line after the current line which matches regular expression `regex`.
+* `?regex?` - first line before the current line which matches regular expression `regex`.
 * _n_ - numeric line number (e.g. `42`, `15`, etc)
 
 ## Commands
 
-| command                            | description                                                                                                                       |
-| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| `.`                                | Print the number of the current line.                                                                                             |
-| `!`*command*                       | Execute *command* with `sh -c "command"`. Prints `!` when `sh` exits.                                                             |
-| `($)=`                             | Print the number of the addressed line.                                                                                           |
-| `($)a`                             | Enter append mode. Input a line with a single `.` to exit append mode.                                                            |
-| `(.,.)d`                           | Delete the addressed line(s) from the buffer.                                                                                     |
-| `f [filename.txt]`                 | Set the default filename. If no filename is given, print the current default filename.                                            |
-| `H`                                | Toggle helpful error messages on/off. Initially the helpful error messages are turned off.                                        |
-| `h`                                | Print a helpful error message for the last error.                                                                                 |
-| `($)i`                             | Enter insert mode. Input a line with a single `.` to exit insert mode.                                                            |
-| `(.,.)n`                           | Print lines from the buffer with line numbers.                                                                                    |
-| `P`                                | Toggle command prompt on/off. Initially the prompt is off unless the `-p string` command line argument was given.                 |
-| `(.,.)p`                           | Print lines from the buffer.                                                                                                      |
-| `Q`                                | Force quit. Always succeeds. Unsaved changes are lost.                                                                            |
-| `q`                                | Quit. Fails if there are unsaved changes. Succeeds if entered a second time with no changes in between. Unsaved changes are lost. |
-| `(1,$)r [filename.txt | !command]` | Read the text of a file into the buffer. A filename must be given if one has not been set (either via cmd line args or `f`).      |
-| `(1,$)w [filename.txt | !command]` | Write the text to a file. A filename must be given if one has not been set (either via cmd line args or `f`).                     |
+| command                            | description                                                                                                                          |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `!command`                         | Execute *command* with `sh -c "command"`. Prints `!` when `sh` exits.                                                                |
+| `($)=`                             | Print the number of the addressed line.                                                                                              |
+| `(.)a`                             | Enter append mode. Input a line with a single `.` to exit append mode.                                                               |
+| `(.,.)c`                           | Change the addressed line(s) in the buffer. Equivalent to N,Md followed by Ni.                                                       |
+| `(.,.)d`                           | Delete the addressed line(s) from the buffer.                                                                                        |
+| `E [filename.txt | !command]`      | Forcefully deletes the buffer and reads the text of a file into the buffer. It sets the default file name. Unsaved changes are lost. |
+| `e [filename.txt | !command]`      | Deletes the buffer and reads the text of a file into the buffer. It sets the default file name.                                      |
+| `f [filename.txt]`                 | Set the default filename. If no filename is given, print the current default filename.                                               |
+| `H`                                | Toggle helpful error messages on/off. Initially the helpful error messages are turned off.                                           |
+| `h`                                | Print a helpful error message for the last error.                                                                                    |
+| `($)i`                             | Enter insert mode. Input a line with a single `.` to exit insert mode.                                                               |
+| `(.,.)n`                           | Print lines from the buffer with line numbers.                                                                                       |
+| `P`                                | Toggle command prompt on/off. Initially the prompt is off unless the `-p string` command line argument was given.                    |
+| `(.,.)p`                           | Print lines from the buffer.                                                                                                         |
+| `Q`                                | Force quit. Always succeeds. Unsaved changes are lost.                                                                               |
+| `q`                                | Quit. Fails if there are unsaved changes. Succeeds if entered a second time with no changes in between. Unsaved changes are lost.    |
+| `($)r [filename.txt | !command]`   | Read the text of a file into the buffer. A filename must be given if one has not been set (either via cmd line args or `f`).         |
+| `(1,$)w [filename.txt | !command]` | Write the text to a file. A filename must be given if one has not been set (either via cmd line args or `f`).                        |
+| `<newline>`                        | A blank line prints the current line and advances `.`. This is equivalent to `.+1p`.                                                 |
+| `# comment`                        | A comment line. Comment lines are ignored which is useful for scripting.                                                             |
 
 ## Regular Expressions
 

@@ -17,7 +17,6 @@ Makefile.in
 missing
 stamp-h1
 tcedit
-tcedit.1
 tcedit*.tar.gz
 tcedit.tgz
 test-driver

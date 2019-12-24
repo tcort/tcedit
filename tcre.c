@@ -19,6 +19,9 @@
 #include "config.h"
 
 #include <limits.h>
+#ifdef HAVE_MALLOC_H
+#include <malloc.h>
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -94,7 +97,11 @@ static tcre_t *compile(char *pattern) {
 	}
 
 	len = strlen(pattern) + 1;
+#ifdef HAVE_REALLOCARRAY
 	tcre = (tcre_t *) reallocarray(NULL, sizeof(tcre_t), len);
+#else
+	tcre = (tcre_t *) malloc(sizeof(tcre_t) * len);
+#endif
 	if (tcre == NULL) {
 		return NULL;
 	}

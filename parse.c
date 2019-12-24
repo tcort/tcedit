@@ -17,15 +17,58 @@
  */
 
 #include <ctype.h>
+#ifdef HAVE_MALLOC_H
+#include <malloc.h>
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "ctx.h"
 #include "parse.h"
+#include "tcre.h"
 #include "text.h"
 
+static size_t resolve_regex(struct context *ctx, char *pattern, size_t n) {
+	size_t i = ctx->dot;
+	char *subject;
 
+	char *regex;
+#ifdef HAVE_REALLOCARRAY
+	regex = (char *) reallocarray(NULL, n+1, sizeof(char));
+#else
+	regex = (char *) malloc((n+1) * sizeof(char));
+#endif
+	if (regex == NULL) {
+		return ctx->dot;
+	}
+	memset(regex, '\0', n+1);
+	snprintf(regex, n, "%s", pattern+1);
+
+	if (pattern[0] == '/') { /* forward search */
+
+		for (i = ctx->dot; i <= text_count(ctx->text); i++) {
+			subject = text_getln(ctx->text, i);
+			if (match(subject, regex) == 1) {
+				break;
+			}
+		}
+
+	} else { /* reverse search */
+
+		for (i = ctx->dot; i <= text_count(ctx->text) && i >= 1; i--) {
+			subject = text_getln(ctx->text, i);
+			if (match(subject, regex) == 1) {
+				break;
+			}
+		}
+
+	}
+
+	free(regex);
+
+	return i;
+}
 
 struct input parse(struct context *ctx, char *line) {
 	struct input in;
@@ -40,7 +83,25 @@ struct input parse(struct context *ctx, char *line) {
 		++p;
 	}
 
-	if (*p == ',') {
+	if (*p == '/' || *p == '?') {
+		size_t n;
+		for (n = 1; n < strlen(p); n++) {
+			if ((p[n] == '/' || p[n] == '?') &&
+				(n == 0 || p[n-1] != '\\')) {
+				break;
+			}
+		}
+		in.line1 = resolve_regex(ctx, p, n);
+		p+=n+1;
+	} else if (*p == '$') {
+		in.line1 = text_count(ctx->text);
+		p++;
+	} else if (*p == '.') {
+		in.line1 = ctx->dot;
+		p++;
+	}
+
+	if (*p == ',' || *p == '%') {
 		in.comma = 1;
 		++p;
 	}
@@ -48,6 +109,24 @@ struct input parse(struct context *ctx, char *line) {
 	in.line2 = (unsigned long) atoi(p);
 	while (p != NULL && isdigit(*p)) {
 		++p;
+	}
+
+	if (*p == '/' || *p == '?') {
+		size_t n;
+		for (n = 1; n < strlen(p); n++) {
+			if ((p[n] == '/' || p[n] == '?') &&
+				(n == 0 || p[n-1] != '\\')) {
+				break;
+			}
+		}
+		in.line2 = resolve_regex(ctx, p, n);
+		p+=n+1;
+	} else if (*p == '$') {
+		in.line2 = text_count(ctx->text);
+		p++;
+	} else if (*p == '.') {
+		in.line2 = ctx->dot;
+		p++;
 	}
 
 	in.letter = *p;

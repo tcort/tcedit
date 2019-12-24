@@ -31,8 +31,12 @@
 struct text *text_new(void) {
 	struct text *t;
 
+#ifdef HAVE_REALLOCARRAY
+	t = reallocarray(NULL, 1, sizeof(struct text));
+#else
 	t = malloc(sizeof(struct text));
-	if (NULL) {
+#endif
+	if (t == NULL) {
 		return NULL;
 	}
 
@@ -53,7 +57,13 @@ struct text *text_new(void) {
 	t->length = 0; /* assume 4K pages */
 	t->incr = 4096/sizeof(long);
 	t->capacity = 4096/sizeof(long);
+
+#ifdef HAVE_REALLOCARRAY
+	t->lines = (long *) reallocarray(NULL, t->capacity, sizeof(long));
+#else
 	t->lines = (long *) malloc(sizeof(long) * t->capacity);
+
+#endif
 	if (t->lines == NULL) {
 		fclose(t->scratch);
 		close(t->scratchfd);
@@ -84,13 +94,19 @@ size_t text_delete(struct text *t, size_t begin, size_t end) {
 
 void text_extend(struct text *t) {
 	t->capacity += t->incr;
+#ifdef HAVE_REALLOCARRAY
 	t->lines = (long *) reallocarray(t->lines, t->capacity, sizeof(long));
+#else
+	t->lines = (long *) realloc(t->lines, t->capacity * sizeof(long));
+#endif
 }
 
 int text_appendln(struct text *t, char *s, size_t where) {
 
 	size_t i;
 	size_t nitems;
+
+	where++; /* insert *after* where */
 
 	if (t->length + 1 >= t->capacity) {
 		text_extend(t);
@@ -111,9 +127,9 @@ int text_append(struct text *t, struct text *tin, size_t where) {
 
 	size_t i;
 
-	for (i = 1; i <= tin->length; i++) {
+	for (i = 0; i < tin->length; i++) {
 		int rc;
-		rc = text_appendln(t, text_getln(tin, i), where+i);
+		rc = text_appendln(t, text_getln(tin, i+1), where+i);
 		if (rc == -1) {
 			return -1;
 		}

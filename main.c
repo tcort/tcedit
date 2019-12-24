@@ -86,8 +86,10 @@ int main(int argc, char *argv[]) {
 	argv += optind;
 
 	if (argc > 0) {
-		in.letter = 'r'; /* TODO simulate 'e' instead */
+		in.letter = 'e';
 		in.params = strdup(argv[0]);
+		in.line1 = 0;
+		in.line2 = 0;
 		goto exec_cmd;
 	}
 

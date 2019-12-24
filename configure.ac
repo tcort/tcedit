@@ -24,8 +24,9 @@ AC_GNU_SOURCE
 AC_HEADER_STDC
 
 AC_CHECK_HEADERS([malloc.h])
+AC_CHECK_FUNCS([reallocarray])
 
 AC_CONFIG_HEADERS([config.h:config.in])
 
-AC_CONFIG_FILES([Makefile tcedit.1])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
