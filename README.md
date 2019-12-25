@@ -2,6 +2,21 @@
 
 A simple text editor.
 
+## Requirements
+
+`tcedit` doesn't have any external dependencies. To compile it, one simply needs a standard C toolchain.
+
+## Installation
+
+Standard autotools build:
+
+```
+$ ./configure
+$ make
+$ make check
+# make install
+```
+
 ## Usage
 
 ```
@@ -71,3 +86,29 @@ Lines may be addressed as follows:
 | `?`     | Matches the preceding character 0 or 1 times.          |
 | `*`     | Matches the preceding character 0 or more times.       |
 | `+`     | Matches the preceding character 1 or more times.       |
+
+## License
+
+**GPLv3+**
+
+```
+/*
+ * tcedit - line-oriented text editor.
+ * Copyright (C) 2019  Thomas Cort <linuxgeek@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+```
+
+See `COPYING` for full details.
