@@ -15,7 +15,7 @@ dnl    You should have received a copy of the GNU General Public License
 dnl    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 AC_PREREQ(2.59)
-AC_INIT([tcedit], [0.0.0], [linuxgeek@gmail.com])
+AC_INIT([tcedit], [2019.12.25], [linuxgeek@gmail.com])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 
 AC_LANG([C])
