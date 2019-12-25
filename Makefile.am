@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-EXTRA_DIST = README.md CHANGELOG.md
+EXTRA_DIST = README.md CHANGELOG.md tcedit.1
 
 bin_PROGRAMS = tcedit
 
@@ -30,7 +30,7 @@ tcedit_SOURCES = \
 	shell.c shell.h \
 	text.c text.h \
 	sig.c sig.h \
-	tctest.h
+	check.h
 
 man_MANS = tcedit.1
 
