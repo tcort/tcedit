@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-EXTRA_DIST = README.md CHANGELOG.md tcedit.1
+EXTRA_DIST = README.md CHANGELOG.md CONTRIBUTING.md tcedit.1
 
 bin_PROGRAMS = tcedit
 
