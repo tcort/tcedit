@@ -28,7 +28,6 @@
 #include "error.h"
 #include "io.h"
 #include "parse.h"
-#include "sig.h"
 #include "text.h"
 
 int main(int argc, char *argv[]) {
@@ -57,8 +56,6 @@ int main(int argc, char *argv[]) {
 		ctx.restricted = 1;
 	}
 
-	siginit(&ctx);
-
 	while ((optc = getopt(argc, argv, short_options)) != -1) {
 		switch (optc) {
 			case 'p':
@@ -73,11 +70,11 @@ int main(int argc, char *argv[]) {
 				break;
 			case 'v':
 				fprintf(ctx.out, "%s\n", PACKAGE_STRING);
-				ctx_free(&ctx);
+				text_free(ctx.text);
 				exit(EXIT_SUCCESS);
 				break;
 			default:
-				ctx_free(&ctx);
+				text_free(ctx.text);
 				exit(EXIT_FAILURE);
 		}
 	}
@@ -147,7 +144,7 @@ exec_cmd:
 		}
 	} while (!ctx.done);
 
-	ctx_free(&ctx);
+	text_free(ctx.text);
 
 	return 0;
 }

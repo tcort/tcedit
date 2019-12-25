@@ -21,7 +21,7 @@ bin_PROGRAMS = tcedit
 tcedit_SOURCES = \
 	cmd.c cmd.h \
 	config.h \
-	ctx.c ctx.h \
+	ctx.h \
 	error.c error.h \
 	io.c io.h \
 	main.c \
@@ -29,7 +29,6 @@ tcedit_SOURCES = \
 	tcre.c tcre.h \
 	shell.c shell.h \
 	text.c text.h \
-	sig.c sig.h \
 	check.h
 
 man_MANS = tcedit.1
