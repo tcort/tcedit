@@ -32,12 +32,13 @@
 
 int main(int argc, char *argv[]) {
 
-	int		i;
-	int		rc;
-	int		optc;
-	const char     *const short_options = "p:rsv";
-	struct input	in;
-	struct context	ctx;
+	int i;
+	int rc;
+	int optc;
+	char *cmd;
+	const char *const short_options = "p:rsv";
+	struct input in;
+	struct context ctx;
 
 	ctx.in = stdin,
 	ctx.out = stdout,
@@ -83,6 +84,7 @@ int main(int argc, char *argv[]) {
 	argv += optind;
 
 	if (argc > 0) {
+		cmd = NULL;
 		in.letter = 'e';
 		in.params = strdup(argv[0]);
 		in.line1 = 0;
@@ -91,7 +93,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	do {
-		char *cmd = readaline(ctx.in, ctx.out, ctx.prompt_on ? ctx.prompt : "");
+		cmd = readaline(ctx.in, ctx.out, ctx.prompt_on ? ctx.prompt : "");
 		if (cmd == NULL) {
 			break;
 		}
@@ -137,7 +139,9 @@ exec_cmd:
 			free(in.params);
 			in.params = NULL;
 		}
-		free(cmd);
+		if (cmd != NULL) {
+			free(cmd);
+		}
 
 		if (feof(ctx.in) || ferror(ctx.in)) {
 			ctx.done = 1;
