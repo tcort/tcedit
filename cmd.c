@@ -18,6 +18,8 @@
 
 #include "config.h"
 
+#include <string.h>
+
 #include "cmd.h"
 #include "error.h"
 #include "shell.h"
@@ -205,6 +207,12 @@ int tce_E(struct context *ctx, struct input in) {
 		filename = ctx->filename;
 	}
 
+	if (ctx->restricted == 1 && (strstr(filename, "..") != NULL ||
+					strstr(filename, "/") != NULL)) {
+		tce_errno = TCE_ERR_RMODE_FILE;
+		return -1;
+	}
+
 	/* clear buffer */
 	if (text_count(ctx->text) > 0) {
 		text_delete(ctx->text, 1, text_count(ctx->text));
@@ -280,6 +288,11 @@ int tce_f(struct context *ctx, struct input in) {
 		}
 		fprintf(ctx->out, "%s\n", ctx->filename);
 	} else {
+		if (ctx->restricted == 1 && (strstr(in.params, "..") != NULL ||
+						strstr(in.params, "/") != NULL)) {
+			tce_errno = TCE_ERR_RMODE_FILE;
+			return -1;
+		}
 		snprintf(ctx->filename, FILENAME_MAX+1, "%s", in.params);
 	}
 	/* ctx->dot unchanged */
@@ -427,6 +440,12 @@ int tce_r(struct context *ctx, struct input in) {
 		return -1;
 	}
 
+	if (ctx->restricted == 1 && (strstr(filename, "..") != NULL ||
+					strstr(filename, "/") != NULL)) {
+		tce_errno = TCE_ERR_RMODE_FILE;
+		return -1;
+	}
+
 	if (filename[0] == '!') {
 		if (ctx->restricted == 1) {
 			tce_errno = TCE_ERR_RMODE_PROC_IO;
@@ -491,6 +510,12 @@ int tce_w(struct context *ctx, struct input in) {
 	filename = (in.params[0] == '\0') ? ctx->filename : in.params;
 	if (filename[0] == '\0') { /* no parameter and no default */
 		tce_errno = TCE_ERR_FILENAME_NOT_SET;
+		return -1;
+	}
+
+	if (ctx->restricted == 1 && (strstr(filename, "..") != NULL ||
+					strstr(filename, "/") != NULL)) {
+		tce_errno = TCE_ERR_RMODE_FILE;
 		return -1;
 	}
 
