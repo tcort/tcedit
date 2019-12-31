@@ -18,11 +18,11 @@
 
 #include "config.h"
 
+#include <stdlib.h>
 #include <string.h>
 
 #include "cmd.h"
 #include "error.h"
-#include "shell.h"
 
 int tce_equals(struct context *ctx, struct input in);
 int tce_exclaim(struct context *ctx, struct input in);
@@ -64,12 +64,11 @@ int tce_exclaim(struct context *ctx, struct input in) {
 	if (in.params == NULL) {
 		tce_errno = TCE_ERR_NO_PARAM;
 		return -1;
-	}
-	if (ctx->restricted) {
+	} else if (ctx->restricted) {
 		tce_errno = TCE_ERR_NON_RMODE_CMD;
 		return -1;
 	}
-	doshell(in.params);
+	system(in.params);
 	if (ctx->suppress == 0) {
 		fprintf(ctx->out, "!\n");
 	}

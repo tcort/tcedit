@@ -22,13 +22,13 @@
 #ifdef HAVE_MALLOC_H
 #include <malloc.h>
 #endif
+#include <regex.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
 #include "error.h"
-#include "tcre.h"
 #include "text.h"
 
 struct text *text_new(void) {
@@ -141,12 +141,33 @@ int text_append(struct text *t, struct text *tin, size_t where) {
 	return 0;
 }
 
+int text_match(struct text *t, char *pattern, size_t where) {
+
+	int rc;
+	char *subject;
+	regex_t preg;
+
+	subject = text_getln(t, where);
+	if (subject == NULL) {
+		return -1;
+	}
+
+	rc = regcomp(&preg, pattern, REG_EXTENDED | REG_NOSUB);
+	if (rc != 0) {
+		return -1;
+	}
+
+	rc = regexec(&preg, subject, 0, NULL, 0);
+	regfree(&preg);
+
+	return (rc == 0);
+}
+
 size_t text_search_fwd(struct text *t, char *regex, size_t begin, size_t end) {
 	size_t i;
 	char *subject;
 	for (i = begin; i <= end && i <= text_count(t); i++) {
-		subject = text_getln(t, i);
-		if (match(subject, regex) == 1) {
+		if (text_match(t, regex, i) == 1) {
 			return i;
 		}
 	}
@@ -157,8 +178,7 @@ size_t text_search_rev(struct text *t, char *regex, size_t begin, size_t end) {
 	size_t i;
 	char *subject;
 	for (i = begin; i >= end && i >= 1; i--) {
-		subject = text_getln(t, i);
-		if (match(subject, regex) == 1) {
+		if (text_match(t, regex, i) == 1) {
 			return i;
 		}
 	}

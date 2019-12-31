@@ -28,7 +28,6 @@
 
 #include "ctx.h"
 #include "parse.h"
-#include "tcre.h"
 #include "text.h"
 
 static size_t resolve_regex(struct context *ctx, char *pattern, size_t n) {

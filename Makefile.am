@@ -26,15 +26,7 @@ tcedit_SOURCES = \
 	io.c io.h \
 	main.c \
 	parse.c parse.h \
-	tcre.c tcre.h \
-	shell.c shell.h \
 	text.c text.h \
 	check.h
 
 man_MANS = tcedit.1
-
-check_PROGRAMS = tcre.test
-
-tcre_test_SOURCES = check.h tcre.c tcre.h tcre.test.c
-
-TESTS = $(check_PROGRAMS)
