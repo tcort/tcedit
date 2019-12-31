@@ -42,6 +42,8 @@ size_t text_delete(struct text *t, size_t begin, size_t end);
 void text_extend(struct text *t);
 int text_appendln(struct text *t, char *s, size_t where);
 int text_append(struct text *t, struct text *tin, size_t where);
+size_t text_search_fwd(struct text *t, char *regex, size_t begin, size_t end);
+size_t text_search_rev(struct text *t, char *regex, size_t begin, size_t end);
 struct text *text_read(FILE *in, int period_ends_input);
 void text_write(struct text *t, FILE *out, size_t begin, size_t end, int show_lineno);
 char *text_getln(struct text *t, size_t lineno);

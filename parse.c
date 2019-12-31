@@ -48,23 +48,9 @@ static size_t resolve_regex(struct context *ctx, char *pattern, size_t n) {
 	snprintf(regex, n, "%s", pattern+1);
 
 	if (pattern[0] == '/') { /* forward search */
-
-		for (i = ctx->dot; i <= text_count(ctx->text); i++) {
-			subject = text_getln(ctx->text, i);
-			if (match(subject, regex) == 1) {
-				break;
-			}
-		}
-
+		i = text_search_fwd(ctx->text, regex, ctx->dot, text_count(ctx->text));
 	} else { /* reverse search */
-
-		for (i = ctx->dot; i <= text_count(ctx->text) && i >= 1; i--) {
-			subject = text_getln(ctx->text, i);
-			if (match(subject, regex) == 1) {
-				break;
-			}
-		}
-
+		i = text_search_rev(ctx->text, regex, ctx->dot, 1);
 	}
 
 	free(regex);

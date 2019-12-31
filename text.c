@@ -28,6 +28,7 @@
 #include <unistd.h>
 
 #include "error.h"
+#include "tcre.h"
 #include "text.h"
 
 struct text *text_new(void) {
@@ -137,6 +138,30 @@ int text_append(struct text *t, struct text *tin, size_t where) {
 		}
 	}
 
+	return 0;
+}
+
+size_t text_search_fwd(struct text *t, char *regex, size_t begin, size_t end) {
+	size_t i;
+	char *subject;
+	for (i = begin; i <= end && i <= text_count(t); i++) {
+		subject = text_getln(t, i);
+		if (match(subject, regex) == 1) {
+			return i;
+		}
+	}
+	return 0;
+}
+
+size_t text_search_rev(struct text *t, char *regex, size_t begin, size_t end) {
+	size_t i;
+	char *subject;
+	for (i = begin; i >= end && i >= 1; i--) {
+		subject = text_getln(t, i);
+		if (match(subject, regex) == 1) {
+			return i;
+		}
+	}
 	return 0;
 }
 
