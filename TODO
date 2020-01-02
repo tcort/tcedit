@@ -3,11 +3,9 @@ memory management
  - cut down on exit() calls
 
 impl
- - regexp should return where matches were found (needed for 's' command).
  - `s` command
  - `g` command
  - better signal handling
- - restricted mode should limit to current directory
 
 testing
  - unit tests for everything?
