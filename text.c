@@ -215,6 +215,7 @@ int text_substitute(struct text *t, char *pattern, char *replacement,
 	dstring_append(&ds, subject, matches[0].rm_so);
 	dstring_append(&ds, replacement, strlen(replacement));
 	dstring_append(&ds, &subject[matches[0].rm_eo], strlen(&subject[matches[0].rm_eo]));
+	dstring_append(&ds, "\0", 1);
 
 	text_putln(t, where, ds.s);
 
