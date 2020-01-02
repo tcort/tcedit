@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "dstring.h"
 #include "error.h"
 #include "text.h"
 
@@ -183,6 +184,44 @@ size_t text_search_rev(struct text *t, char *regex, size_t begin, size_t end) {
 		}
 	}
 	return 0;
+}
+
+int text_substitute(struct text *t, char *pattern, char *replacement,
+						size_t where) {
+
+	int rc;
+	char *subject;
+	regex_t preg;
+	regmatch_t matches[1];
+	struct dstring ds;
+
+	subject = text_getln(t, where);
+	if (subject == NULL) {
+		return -1;
+	}
+
+	rc = regcomp(&preg, pattern, REG_EXTENDED);
+	if (rc != 0) {
+		return -1;
+	}
+
+	rc = regexec(&preg, subject, 1, matches, 0);
+	if (rc != 0) {
+		regfree(&preg);
+		return 0;
+	}
+
+	ds = dstring_new();
+	dstring_append(&ds, subject, matches[0].rm_so);
+	dstring_append(&ds, replacement, strlen(replacement));
+	dstring_append(&ds, &subject[matches[0].rm_eo], strlen(&subject[matches[0].rm_eo]));
+
+	text_putln(t, where, ds.s);
+
+	dstring_free(&ds);
+	regfree(&preg);
+
+	return 1;
 }
 
 struct text *text_read(FILE *in, int period_ends_input) {

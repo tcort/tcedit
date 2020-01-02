@@ -16,28 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __TCE_CMD_H
-#define __TCE_CMD_H
+#ifndef __TCE_DSTRING_H
+#define __TCE_DSTRING_H
 
-#include "ctx.h"
-#include "parse.h"
+#include <stddef.h>
 
-#define NCOMMANDS (21)
-
-enum address_default {
-	ADDR_FIRST_LINE = '1',
-	ADDR_CURRENT_LINE = '.',
-	ADDR_LAST_LINE = '$',
-	ADDR_NEXT_LINE = 'N',
-	ADDR_NONE = '0'
+struct dstring {
+	char *s;
+	size_t len;
 };
 
-struct command {
-        char letter;
-        int (*action) (struct context *ctx, struct input in);
-	enum address_default default_addrs[2];
-};
-
-extern struct command commands[NCOMMANDS];
+struct dstring dstring_new(void);
+void dstring_append(struct dstring *ds, char *s, size_t len);
+void dstring_free(struct dstring *ds);
 
 #endif

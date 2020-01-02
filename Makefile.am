@@ -22,6 +22,7 @@ tcedit_SOURCES = \
 	cmd.c cmd.h \
 	config.h \
 	ctx.h \
+	dstring.c dstring.h \
 	error.c error.h \
 	io.c io.h \
 	main.c \

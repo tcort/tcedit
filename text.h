@@ -50,5 +50,5 @@ struct text *text_read(FILE *in, int period_ends_input);
 void text_extend(struct text *t);
 void text_free(struct text *t);
 void text_write(struct text *t, FILE *out, size_t begin, size_t end, int show_lineno);
-
+int text_substitute(struct text *t, char *pattern, char *replacement, size_t where);
 #endif

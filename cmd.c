@@ -43,6 +43,7 @@ int tce_Q(struct context *ctx, struct input in);
 int tce_q(struct context *ctx, struct input in);
 int tce_r(struct context *ctx, struct input in);
 int tce_w(struct context *ctx, struct input in);
+int tce_x(struct context *ctx, struct input in);
 
 /*
  * ($)=
@@ -551,6 +552,32 @@ int tce_w(struct context *ctx, struct input in) {
 	return 0;
 }
 
+/*
+ * x (experimental command for debugging)
+ */
+int tce_x(struct context *ctx, struct input in) {
+
+	int rc;
+
+	if (in.line1 < 1 || in.line1 > text_count(ctx->text)) {
+		tce_errno = TCE_ERR_BAD_ADDR;
+		return -1;
+	}
+
+	rc = text_substitute(ctx->text, "foo", "bar", in.line1);
+	if (rc == -1) {
+		tce_errno = TCE_ERR_BAD_SUB;
+		return -1;
+	}
+
+	if (rc == 1) {
+		ctx->text_dirty = 1;
+		ctx->dot = in.line1;
+	}
+
+	return 0;
+}
+
 struct command commands[NCOMMANDS] = {
 	{ '!', tce_exclaim,	{ ADDR_NONE,		ADDR_NONE } },
 	{ '=', tce_equals,	{ ADDR_LAST_LINE,	ADDR_NONE } },
@@ -571,5 +598,6 @@ struct command commands[NCOMMANDS] = {
 	{ 'Q', tce_Q, 		{ ADDR_NONE,		ADDR_NONE } },
 	{ 'q', tce_q, 		{ ADDR_NONE,		ADDR_NONE } },
 	{ 'r', tce_r,		{ ADDR_LAST_LINE,       ADDR_NONE } },
-	{ 'w', tce_w,		{ ADDR_FIRST_LINE,      ADDR_LAST_LINE } }
+	{ 'w', tce_w,		{ ADDR_FIRST_LINE,      ADDR_LAST_LINE } },
+	{ 'x', tce_x,		{ ADDR_CURRENT_LINE,	ADDR_NONE } }
 };
