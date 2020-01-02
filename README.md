@@ -69,6 +69,7 @@ Lines may be addressed as follows:
 | `Q`                                | Force quit. Always succeeds. Unsaved changes are lost.                                                                               |
 | `q`                                | Quit. Fails if there are unsaved changes. Succeeds if entered a second time with no changes in between. Unsaved changes are lost.    |
 | `($)r [filename.txt]` or `($)r [!command]`   | Read the text of a file into the buffer. A filename must be given if one has not been set (either via cmd line args or `f`).         |
+| `(.,.)s/pattern/replacement/       | Perform a global find and replace.
 | `(1,$)w [filename.txt]` or `(1,$)w [!command]` | Write the text to a file. A filename must be given if one has not been set (either via cmd line args or `f`).                        |
 | `<newline>`                        | A blank line prints the current line and advances `.`. This is equivalent to `.+1p`.                                                 |
 | `# comment`                        | A comment line. Comment lines are ignored which is useful for scripting.                                                             |

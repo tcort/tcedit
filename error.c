@@ -31,7 +31,8 @@ char *tce_errlist[] = {
 	"process i/o not available in restricted mode",
 	"missing parameter",
 	"file not available in restricted mode",
-	"bad substitution"
+	"bad substitution",
+	"bad parameter"
 };
 
 int tce_nerror = sizeof(tce_errlist)/sizeof(char*);

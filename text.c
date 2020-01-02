@@ -205,16 +205,16 @@ int text_substitute(struct text *t, char *pattern, char *replacement,
 		return -1;
 	}
 
-	rc = regexec(&preg, subject, 1, matches, 0);
-	if (rc != 0) {
-		regfree(&preg);
-		return 0;
+	ds = dstring_new();
+
+	while (regexec(&preg, subject, 1, matches, 0) == 0) {
+		dstring_append(&ds, subject, matches[0].rm_so);
+		dstring_append(&ds, replacement, strlen(replacement));
+
+		subject = &subject[matches[0].rm_eo];
 	}
 
-	ds = dstring_new();
-	dstring_append(&ds, subject, matches[0].rm_so);
-	dstring_append(&ds, replacement, strlen(replacement));
-	dstring_append(&ds, &subject[matches[0].rm_eo], strlen(&subject[matches[0].rm_eo]));
+	dstring_append(&ds, subject, strlen(subject));
 	dstring_append(&ds, "\0", 1);
 
 	text_putln(t, where, ds.s);

@@ -18,6 +18,8 @@
 
 #include "config.h"
 
+#include <limits.h>
+#include <regex.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -42,8 +44,8 @@ int tce_p(struct context *ctx, struct input in);
 int tce_Q(struct context *ctx, struct input in);
 int tce_q(struct context *ctx, struct input in);
 int tce_r(struct context *ctx, struct input in);
+int tce_s(struct context *ctx, struct input in);
 int tce_w(struct context *ctx, struct input in);
-int tce_x(struct context *ctx, struct input in);
 
 /*
  * ($)=
@@ -495,6 +497,65 @@ int tce_r(struct context *ctx, struct input in) {
 }
 
 /*
+ * (.,.)s/pattern/replacement/
+ */
+int tce_s(struct context *ctx, struct input in) {
+
+	int rc;
+	size_t i;
+	char pattern[LINE_MAX];
+	char replacement[LINE_MAX];
+	regex_t preg;
+	regmatch_t matches[8];
+
+	if (in.line1 < 1 || in.line1 > in.line2 || in.line2 > text_count(ctx->text) || in.line1 > text_count(ctx->text)) {
+		tce_errno = TCE_ERR_BAD_ADDR;
+		return -1;
+	}
+
+	rc = regcomp(&preg, "/([^\\/]*)/([^\\/]*)/", REG_EXTENDED);
+	if (rc != 0) {
+		regfree(&preg);
+		tce_errno = TCE_ERR_BAD_PARAM;
+		return -1;
+	}
+
+	rc = regexec(&preg, in.params, 8, matches, 0);
+	if (rc != 0) {
+		regfree(&preg);
+		tce_errno = TCE_ERR_BAD_PARAM;
+		return -1;
+	}
+
+	regfree(&preg);
+
+	memset(pattern, '\0', LINE_MAX);
+	if (matches[1].rm_eo - matches[1].rm_so > 0 && matches[1].rm_eo - matches[1].rm_so < LINE_MAX) {
+		snprintf(pattern, matches[1].rm_eo - matches[1].rm_so + 1, "%s", &in.params[matches[1].rm_so]);
+	}
+
+	memset(replacement, '\0', LINE_MAX);
+	if (matches[2].rm_eo - matches[2].rm_so > 0 && matches[2].rm_eo - matches[2].rm_so < LINE_MAX) {
+		snprintf(replacement, matches[2].rm_eo - matches[2].rm_so + 1, "%s", &in.params[matches[2].rm_so]);
+	}
+
+	for (i = in.line1; i <= in.line2; i++) {
+		rc = text_substitute(ctx->text, pattern, replacement, i);
+		if (rc == -1) {
+			tce_errno = TCE_ERR_BAD_SUB;
+			return -1;
+		}
+	}
+
+	if (rc == 1) {
+		ctx->text_dirty = 1;
+		ctx->dot = in.line1;
+	}
+
+	return 0;
+}
+
+/*
  * (1,$)w file
  * (1,$)w !command
  */
@@ -552,31 +613,6 @@ int tce_w(struct context *ctx, struct input in) {
 	return 0;
 }
 
-/*
- * x (experimental command for debugging)
- */
-int tce_x(struct context *ctx, struct input in) {
-
-	int rc;
-
-	if (in.line1 < 1 || in.line1 > text_count(ctx->text)) {
-		tce_errno = TCE_ERR_BAD_ADDR;
-		return -1;
-	}
-
-	rc = text_substitute(ctx->text, "foo", "bar", in.line1);
-	if (rc == -1) {
-		tce_errno = TCE_ERR_BAD_SUB;
-		return -1;
-	}
-
-	if (rc == 1) {
-		ctx->text_dirty = 1;
-		ctx->dot = in.line1;
-	}
-
-	return 0;
-}
 
 struct command commands[NCOMMANDS] = {
 	{ '!', tce_exclaim,	{ ADDR_NONE,		ADDR_NONE } },
@@ -598,6 +634,6 @@ struct command commands[NCOMMANDS] = {
 	{ 'Q', tce_Q, 		{ ADDR_NONE,		ADDR_NONE } },
 	{ 'q', tce_q, 		{ ADDR_NONE,		ADDR_NONE } },
 	{ 'r', tce_r,		{ ADDR_LAST_LINE,       ADDR_NONE } },
-	{ 'w', tce_w,		{ ADDR_FIRST_LINE,      ADDR_LAST_LINE } },
-	{ 'x', tce_x,		{ ADDR_CURRENT_LINE,	ADDR_NONE } }
+	{ 's', tce_s,		{ ADDR_CURRENT_LINE,	ADDR_CURRENT_LINE } },
+	{ 'w', tce_w,		{ ADDR_FIRST_LINE,      ADDR_LAST_LINE } }
 };

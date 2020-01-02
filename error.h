@@ -31,6 +31,7 @@
 #define TCE_ERR_NO_PARAM 9
 #define TCE_ERR_RMODE_FILE 10
 #define TCE_ERR_BAD_SUB 11
+#define TCE_ERR_BAD_PARAM 12
 
 extern char *tce_errlist[];
 extern int tce_nerror;
