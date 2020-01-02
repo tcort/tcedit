@@ -61,6 +61,7 @@ int tce_equals(struct context *ctx, struct input in) {
  * !command
  */
 int tce_exclaim(struct context *ctx, struct input in) {
+	int rc;
 	if (in.params == NULL) {
 		tce_errno = TCE_ERR_NO_PARAM;
 		return -1;
@@ -68,7 +69,8 @@ int tce_exclaim(struct context *ctx, struct input in) {
 		tce_errno = TCE_ERR_NON_RMODE_CMD;
 		return -1;
 	}
-	system(in.params);
+	rc = system(in.params);
+	(void) rc;
 	if (ctx->suppress == 0) {
 		fprintf(ctx->out, "!\n");
 	}
