@@ -1,13 +1,3 @@
-memory management
- - free memory when exiting due to error
- - cut down on exit() calls
-
-impl
- - `g` command
- - better signal handling
-
-testing
- - unit tests for everything?
-
-documentation
- - improve manual page
+- implement move command (`m`)
+- add unit tests
+- improve manual page
