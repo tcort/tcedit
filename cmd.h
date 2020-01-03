@@ -39,5 +39,6 @@ struct command {
 };
 
 extern struct command commands[NCOMMANDS];
+int exec_cmd(struct context *ctx, struct input in);
 
 #endif

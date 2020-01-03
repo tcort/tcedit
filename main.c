@@ -90,7 +90,7 @@ int main(int argc, char *argv[]) {
 		in.params = strdup(argv[0]);
 		in.line1 = 0;
 		in.line2 = 0;
-		goto exec_cmd;
+		exec_cmd(&ctx, in);
 	}
 
 	do {
@@ -99,37 +99,7 @@ int main(int argc, char *argv[]) {
 			break;
 		}
 		in = parse(&ctx, cmd);
-exec_cmd:
-		rc = -1;
-		for (i = 0; i < NCOMMANDS; i++) {
-			if (commands[i].letter == in.letter) {
-				if (in.line1 == 0) {
-					switch (commands[i].default_addrs[0]) {
-						case ADDR_FIRST_LINE: 	in.line1 = 1; break;
-						case ADDR_CURRENT_LINE:	in.line1 = ctx.dot; break;
-						case ADDR_LAST_LINE:	in.line1 = text_count(ctx.text); break;
-						case ADDR_NEXT_LINE:	in.line1 = ctx.dot + 1; break;
-						case ADDR_NONE:		in.line1 = 0; break;
-						default:		in.line1 = 0; break;
-					}
-				}
-
-				if (in.line2 == 0) {
-					switch (commands[i].default_addrs[1]) {
-						case ADDR_FIRST_LINE: 	in.line2 = 1; break;
-						case ADDR_CURRENT_LINE:	in.line2 = ctx.dot; break;
-						case ADDR_LAST_LINE:	in.line2 = text_count(ctx.text); break;
-						case ADDR_NEXT_LINE:	in.line2 = ctx.dot + 1; break;
-						case ADDR_NONE:		in.line2 = 0; break;
-						default:		in.line2 = 0; break;
-					}
-
-				}
-
-				rc = commands[i].action(&ctx, in);
-				break;
-			}
-		}
+		rc = exec_cmd(&ctx, in);
 		if (rc != 0) {
 			if (ctx.help_on == 1) {
 				fprintf(ctx.out, "%s\n", tce_strerror(tce_errno));

@@ -3,7 +3,6 @@ memory management
  - cut down on exit() calls
 
 impl
- - g flag for `s`
  - `g` command
  - better signal handling
 

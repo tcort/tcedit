@@ -540,14 +540,16 @@ int tce_s(struct context *ctx, struct input in) {
 	}
 
 	for (i = in.line1; i <= in.line2; i++) {
-		rc = text_substitute(ctx->text, pattern, replacement, i);
-		if (rc == -1) {
+		int r;
+		r = text_substitute(ctx->text, pattern, replacement, i);
+		if (r == -1) {
 			tce_errno = TCE_ERR_BAD_SUB;
 			return -1;
 		}
+		rc+=r;
 	}
 
-	if (rc == 1) {
+	if (rc > 0) {
 		ctx->text_dirty = 1;
 		ctx->dot = in.line1;
 	}
@@ -613,6 +615,40 @@ int tce_w(struct context *ctx, struct input in) {
 	return 0;
 }
 
+int exec_cmd(struct context *ctx, struct input in) {
+	int rc, i;
+	rc = -1;
+	for (i = 0; i < NCOMMANDS; i++) {
+		if (commands[i].letter == in.letter) {
+			if (in.line1 == 0) {
+				switch (commands[i].default_addrs[0]) {
+					case ADDR_FIRST_LINE: 	in.line1 = 1; break;
+					case ADDR_CURRENT_LINE:	in.line1 = ctx->dot; break;
+					case ADDR_LAST_LINE:	in.line1 = text_count(ctx->text); break;
+					case ADDR_NEXT_LINE:	in.line1 = ctx->dot + 1; break;
+					case ADDR_NONE:		in.line1 = 0; break;
+					default:		in.line1 = 0; break;
+				}
+			}
+
+			if (in.line2 == 0) {
+				switch (commands[i].default_addrs[1]) {
+					case ADDR_FIRST_LINE: 	in.line2 = 1; break;
+					case ADDR_CURRENT_LINE:	in.line2 = ctx->dot; break;
+					case ADDR_LAST_LINE:	in.line2 = text_count(ctx->text); break;
+					case ADDR_NEXT_LINE:	in.line2 = ctx->dot + 1; break;
+					case ADDR_NONE:		in.line2 = 0; break;
+					default:		in.line2 = 0; break;
+				}
+
+			}
+
+			rc = commands[i].action(ctx, in);
+			break;
+		}
+	}
+	return rc;
+}
 
 struct command commands[NCOMMANDS] = {
 	{ '!', tce_exclaim,	{ ADDR_NONE,		ADDR_NONE } },
@@ -637,3 +673,5 @@ struct command commands[NCOMMANDS] = {
 	{ 's', tce_s,		{ ADDR_CURRENT_LINE,	ADDR_CURRENT_LINE } },
 	{ 'w', tce_w,		{ ADDR_FIRST_LINE,      ADDR_LAST_LINE } }
 };
+
+
