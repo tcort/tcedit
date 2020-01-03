@@ -16,6 +16,7 @@ Makefile
 Makefile.in
 missing
 stamp-h1
+rtcedit
 tcedit
 tcedit*.tar.gz
 tcedit.tgz

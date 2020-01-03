@@ -16,7 +16,7 @@
 
 EXTRA_DIST = README.md CHANGELOG.md CONTRIBUTING.md HACKING.md tcedit.1
 
-bin_PROGRAMS = tcedit
+bin_PROGRAMS = tcedit rtcedit
 
 tcedit_SOURCES = \
 	cmd.c cmd.h \
@@ -29,5 +29,7 @@ tcedit_SOURCES = \
 	parse.c parse.h \
 	text.c text.h \
 	check.h
+
+rtcedit_SOURCES = $(tcedit_SOURCES)
 
 man_MANS = tcedit.1

@@ -32,7 +32,7 @@ tcedit [-p string] [-r] [-s] [-v] [filename]
 
 ## Restricted Mode
 
-When the editor is invoked with the `-r` command line argument or when invoked as rtcedit (i.e. `argv[0][0] == 'r'`),
+When the editor is invoked with the `-r` command line argument or when invoked as `rtcedit` (i.e. `argv[0][0] == 'r'`),
 it enters restricted mode. In restricted mode, the `!` command is disabled as well as `!` in filenames for `r` and `w`.
 Additionally, only files in the current directory may be edited (i.e. filenames must not contain any `/` characters
 nor the sequence `..`.

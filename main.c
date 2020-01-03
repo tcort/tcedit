@@ -53,8 +53,9 @@ int main(int argc, char *argv[]) {
 	ctx.restricted = 0;
 	ctx.suppress = 0;
 
-	if (argc > 0 && argv[0] != NULL && argv[0][0] == 'r') {
-		ctx.restricted = 1;
+	if (argc > 0 && argv[0] != NULL) {
+		char *bname = basename(argv[0]);
+		ctx.restricted = bname[0] == 'r';
 	}
 
 	while ((optc = getopt(argc, argv, short_options)) != -1) {
