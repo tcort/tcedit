@@ -32,10 +32,12 @@ tcedit [-p string] [-r] [-s] [-v] [filename]
 
 ## Restricted Mode
 
-When the editor is invoked with the `-r` command line argument or when invoked as `rtcedit` (i.e. `argv[0][0] == 'r'`),
+When the editor is invoked with the `-r` command line argument or when invoked as `rtcedit`,
 it enters restricted mode. In restricted mode, the `!` command is disabled as well as `!` in filenames for `r` and `w`.
 Additionally, only files in the current directory may be edited (i.e. filenames must not contain any `/` characters
 nor the sequence `..`.
+
+Note, some restrictions can be bypassed if the user is able to create symbolic links or hard links.
 
 ## Addressing
 
@@ -69,7 +71,7 @@ Lines may be addressed as follows:
 | `Q`                                | Force quit. Always succeeds. Unsaved changes are lost.                                                                               |
 | `q`                                | Quit. Fails if there are unsaved changes. Succeeds if entered a second time with no changes in between. Unsaved changes are lost.    |
 | `($)r [filename.txt]` or `($)r [!command]`   | Read the text of a file into the buffer. A filename must be given if one has not been set (either via cmd line args or `f`).         |
-| `(.,.)s/pattern/replacement/       | Perform a global find and replace.
+| `(.,.)s/pattern/replacement/`      | Perform a global find and replace.
 | `(1,$)w [filename.txt]` or `(1,$)w [!command]` | Write the text to a file. A filename must be given if one has not been set (either via cmd line args or `f`).                        |
 | `<newline>`                        | A blank line prints the current line and advances `.`. This is equivalent to `.+1p`.                                                 |
 | `# comment`                        | A comment line. Comment lines are ignored which is useful for scripting.                                                             |
