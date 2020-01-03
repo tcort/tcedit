@@ -50,6 +50,14 @@ Lines may be addressed as follows:
 * `?regex?` - first line before the current line which matches regular expression `regex`.
 * _n_ - numeric line number (e.g. `42`, `15`, etc)
 
+The following shorthand is available:
+
+| short hand | meaning     |
+| ---------- | ----------- |
+| `,`        | `1,$`       |
+| `,addr`    | `1,addr`    |
+| `addr,`    | `addr,addr` |
+
 ## Commands
 
 | command                            | description                                                                                                                          |

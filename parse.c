@@ -128,11 +128,15 @@ struct input parse(struct context *ctx, char *line) {
 		}
 	}
 
-
+	/* , -> 1,$ */
 	if (in.line2 == 0 && in.line1 == 0 && in.comma == 1) {
 		in.line1 = 1;
 		in.line2 = text_count(ctx->text);
-	} else if (in.line2 == 0 && in.line1 != 0) {
+	/* ,N -> 1,N */
+	} else if (in.line1 == 0 && in.comma && in.line2 != 0) {
+		in.line1 = 1;
+	/* N, -> N,N */
+	} else if (in.line1 != 0 && in.comma && in.line2 == 0) {
 		in.line2 = in.line1;
 	}
 
