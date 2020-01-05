@@ -166,7 +166,6 @@ int text_match(struct text *t, char *pattern, size_t where) {
 
 size_t text_search_fwd(struct text *t, char *regex, size_t begin, size_t end) {
 	size_t i;
-	char *subject;
 	for (i = begin; i <= end && i <= text_count(t); i++) {
 		if (text_match(t, regex, i) == 1) {
 			return i;
@@ -177,7 +176,6 @@ size_t text_search_fwd(struct text *t, char *regex, size_t begin, size_t end) {
 
 size_t text_search_rev(struct text *t, char *regex, size_t begin, size_t end) {
 	size_t i;
-	char *subject;
 	for (i = begin; i >= end && i >= 1; i--) {
 		if (text_match(t, regex, i) == 1) {
 			return i;
