@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __TCE_TEXT_H
-#define __TCE_TEXT_H
+#ifndef TCE_TEXT_H
+#define TCE_TEXT_H
 
 struct text {
 	int scratchfd;

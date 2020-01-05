@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __TCE_DSTRING_H
-#define __TCE_DSTRING_H
+#ifndef TCE_DSTRING_H
+#define TCE_DSTRING_H
 
 #include <stddef.h>
 

@@ -22,8 +22,8 @@
  * and it will return the right error code.
  */
 
-#ifndef __CHECK_H
-#define __CHECK_H
+#ifndef TCE_CHECK_H
+#define TCE_CHECK_H
 
 #include <stdio.h>
 #include <stdlib.h>

@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __TCE_IO_H
-#define __TCE_IO_H
+#ifndef TCE_IO_H
+#define TCE_IO_H
 
 #include <stdio.h>
 

@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __TCE_CMD_H
-#define __TCE_CMD_H
+#ifndef TCE_CMD_H
+#define TCE_CMD_H
 
 #include "ctx.h"
 #include "parse.h"

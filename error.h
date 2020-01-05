@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __TCE_ERROR_H
-#define __TCE_ERROR_H
+#ifndef TCE_ERROR_H
+#define TCE_ERROR_H
 
 #define TCE_ERR_OK 0
 #define TCE_ERR_UNSAVED_CHANGES 1

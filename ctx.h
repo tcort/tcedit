@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __TCE_CTX_H
-#define __TCE_CTX_H
+#ifndef TCE_CTX_H
+#define TCE_CTX_H
 
 #include <stdio.h>
 #include <stdint.h>

@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __TCE_PARSE_H
-#define __TCE_PARSE_H
+#ifndef TCE_PARSE_H
+#define TCE_PARSE_H
 
 #include <stddef.h>
 
