@@ -10,6 +10,10 @@ Is the current year in the copyright header? If not, add it.
 
 Bump version in `configure.ac`
 
+### Update CHANGELOG.md
+
+Write about what has changed since the last release.
+
 ### Tag
 
     git tag -a v2019.12.25 -m "Version 2019.12.25"
