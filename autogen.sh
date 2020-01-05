@@ -1,6 +1,6 @@
 #!/bin/sh
 # tcedit - line-oriented text editor.
-# Copyright (C) 2019  Thomas Cort <linuxgeek@gmail.com>
+# Copyright (C) 2019, 2020  Thomas Cort <linuxgeek@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
