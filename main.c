@@ -90,6 +90,8 @@ int main(int argc, char *argv[]) {
 		in.params = strdup(argv[0]);
 		in.line1 = 0;
 		in.line2 = 0;
+		in.nlines = 0;
+		in.comma = 0;
 		exec_cmd(&ctx, in);
 	}
 
