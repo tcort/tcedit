@@ -32,7 +32,6 @@
 
 static size_t resolve_regex(struct context *ctx, char *pattern, size_t n) {
 	size_t i = ctx->dot;
-	char *subject;
 
 	char *regex;
 #ifdef HAVE_REALLOCARRAY
