@@ -33,7 +33,6 @@
 
 int main(int argc, char *argv[]) {
 
-	int i;
 	int rc;
 	int optc;
 	char *cmd;
@@ -41,14 +40,14 @@ int main(int argc, char *argv[]) {
 	struct input in;
 	struct context ctx;
 
-	ctx.in = stdin,
-	ctx.out = stdout,
-	ctx.dot = 0,
-	ctx.help_on = 0,
-	ctx.prompt_on = 0,
-	ctx.prompt = "*",
-	ctx.text_dirty = 0,
-	ctx.done = 0,
+	ctx.in = stdin;
+	ctx.out = stdout;
+	ctx.dot = 0;
+	ctx.help_on = 0;
+	ctx.prompt_on = 0;
+	ctx.prompt = "*";
+	ctx.text_dirty = 0;
+	ctx.done = 0;
 	ctx.text = text_new();
 	ctx.filename[0] = '\0'; /* default to not set */
 	ctx.restricted = 0;
