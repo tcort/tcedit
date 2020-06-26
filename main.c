@@ -93,6 +93,10 @@ int main(int argc, char *argv[]) {
 		in.nlines = 0;
 		in.comma = 0;
 		exec_cmd(&ctx, in);
+		if (in.params != NULL) {
+			free(in.params);
+			in.params = NULL;
+		}
 	}
 
 	do {
